@@ -1,0 +1,19 @@
+.text1 {
+    font-weight: bold;
+    font-size: 80px;
+}
+
+.paper1 {
+    max-height: 400px;
+}
+
+@media (max-width: 820px) {
+    .text1 {
+        font-weight: bold;
+        font-size: 40px;
+    }
+
+    .paper1 {
+        max-height: 150px;
+    }
+}
