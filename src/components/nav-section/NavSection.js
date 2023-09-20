@@ -34,6 +34,7 @@ function NavItem({ item }) {
 
   return (
     <StyledNavItem
+      style={{fontWeight:"bold"}}
       component={RouterLink}
       to={path}
       sx={{

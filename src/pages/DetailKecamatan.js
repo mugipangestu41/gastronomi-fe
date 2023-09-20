@@ -26,7 +26,7 @@ export default function DetailKecamatan() {
   return (
     <>
       <Helmet>
-        <title> Dashboard | Minimal UI </title>
+        <title> Gastronita | Detail Kecamatan </title>
       </Helmet>
 
       <Container maxWidth="lg">
@@ -36,20 +36,35 @@ export default function DetailKecamatan() {
         </Typography>
 
         <Grid container spacing={3}>
-          <Grid item xs={12} sm={6} md={8}>
+          <Grid item xs={12} sm={6} md={8} lg={8}>
           <Paper style={{backgroundImage: 'url("http://localhost:3000/assets/lembang.jpg")', 
           backgroundSize: "cover", backgroundRepeat: "no-repeat", height: "100vh",maxHeight:"300px"}}/>
           </Grid>
 
-          <Grid item xs={12} md={4} lg={4}>
+          <Grid item xs={12} sm={6} md={12} lg={4}>
           <Paper style={{backgroundImage: 'url("http://localhost:3000/assets/map-lembang.jpg")', 
           backgroundSize: "cover", backgroundRepeat: "no-repeat", height: "100vh",maxHeight:"300px"}}/>
             
           </Grid>
 
-         
+          <Grid item xs={0} md={0} lg={8} style={{marginTop: "-20px"}}/>
+           
+          <Grid item xs={12} md={4} lg={4}>
+            {/* <Card > */}
+              <div style={{marginLeft:"10px", marginTop:"10px", marginBottom:"10px", marginRight:"10px"}}>
+              {/* <Typography variant='h5'>Infografis</Typography> */}
+              <center style={{marginTop:"10px"}}>
+                
+                <Button href="kudapan/lembang" variant='contained' color='inherit'>Kudapan</Button>
+                <Button href="rumah-makan/lembang" style={{marginLeft:"20px"}} variant='contained' color='inherit'>Rumah Makan</Button>
+              {/* <img width={"150px"} src="http://localhost:3000/assets/gastro.jpeg" alt='infografis'/> */}
+              </center>
+              </div>
+            {/* </Card> */}
+            
+          </Grid>
 
-          <Grid item xs={12} md={6} lg={8}>
+          <Grid item xs={12} md={12} lg={12}>
             <Card>
               <div style={{marginLeft:"10px", marginTop:"10px", marginBottom:"10px", marginRight:"10px"}}>
             <Typography variant='h5'>Lembang</Typography>
@@ -61,20 +76,7 @@ export default function DetailKecamatan() {
             </Card>
           </Grid>
 
-          <Grid item xs={12} md={4} lg={4}>
-            <Card style={{height:"160px"}}>
-              <div style={{marginLeft:"10px", marginTop:"10px", marginBottom:"10px", marginRight:"10px"}}>
-              {/* <Typography variant='h5'>Infografis</Typography> */}
-              <center style={{marginTop:"10px"}}>
-                
-                <Button href="kudapan/lembang" style={{marginTop:"50px"}} variant='contained' color='inherit'>Kudapan</Button>
-                <Button href="rumah-makan/lembang" style={{marginLeft:"10px", marginTop:"50px"}} variant='contained' color='inherit'>Rumah Makan</Button>
-              {/* <img width={"150px"} src="http://localhost:3000/assets/gastro.jpeg" alt='infografis'/> */}
-              </center>
-              </div>
-            </Card>
-            
-          </Grid>
+          
          
          
 

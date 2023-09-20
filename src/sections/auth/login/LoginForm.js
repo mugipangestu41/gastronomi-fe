@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 // @mui
-import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox } from '@mui/material';
+import { Stack, IconButton, InputAdornment, TextField } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import axios from 'axios';
 // components
 import Iconify from '../../../components/iconify';
 
@@ -10,21 +11,53 @@ import Iconify from '../../../components/iconify';
 
 export default function LoginForm() {
   const navigate = useNavigate();
-
+  const [uname, setUsername] = useState('')
+  const [pass, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false);
+  const API_URL = process.env.REACT_APP_API
 
-  const handleClick = () => {
-    navigate('/dashboard', { replace: true });
+  useEffect(() => {
+    if(localStorage.getItem("token") !== null) { 
+      navigate("/admin")
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+  const handleClick = async () => {
+    try {
+      await axios.post(`${API_URL}auth/login`,
+      {
+        username: uname, 
+        password: pass
+      })
+      .then(({data}) => {
+        // console.log(data)
+        localStorage.setItem("token", data.data[0].token)
+        localStorage.setItem("usename", data.data[0].username)
+        navigate('/admin', { replace: true });
+      })
+      .catch((e) => {
+        window.alert(e.response.data.messages)
+        // console.log("error", err.response.data)
+      })
+      
+      
+  } catch (err) {
+    console.log(err);
+  }
+    
   };
 
   return (
     <>
       <Stack spacing={3}>
-        <TextField name="email" label="Email address" />
+        <TextField focused autoComplete="on" value={uname} name="username" label="Username" onChange={(e) => setUsername(e.target.value)} />
 
         <TextField
+          autoComplete="on"
           name="password"
+          value={pass}
           label="Password"
+          focused
           type={showPassword ? 'text' : 'password'}
           InputProps={{
             endAdornment: (
@@ -35,17 +68,18 @@ export default function LoginForm() {
               </InputAdornment>
             ),
           }}
+          onChange={(e) => setPassword(e.target.value)}
         />
       </Stack>
 
-      <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
+      {/* <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
         <Checkbox name="remember" label="Remember me" />
         <Link variant="subtitle2" underline="hover">
           Forgot password?
         </Link>
-      </Stack>
+      </Stack> */}
 
-      <LoadingButton fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
+      <LoadingButton style={{marginTop: '20px'}} fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
         Login
       </LoadingButton>
     </>

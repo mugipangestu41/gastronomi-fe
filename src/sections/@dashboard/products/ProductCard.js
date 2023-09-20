@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { Box, Card, Link, Typography, Stack, Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 // utils
-import { fCurrency } from '../../../utils/formatNumber';
+// import { fCurrency } from '../../../utils/formatNumber';
 // components
 import Label from '../../../components/label';
-import { ColorPreview } from '../../../components/color-utils';
+// import { ColorPreview } from '../../../components/color-utils';
 
 // ----------------------------------------------------------------------
 
@@ -25,7 +25,7 @@ ShopProductCard.propTypes = {
 };
 
 export default function ShopProductCard({ product }) {
-  const { name, cover, price, colors, status, priceSale } = product;
+  const { name, cover, status } = product;
 
   return (
     <Card>

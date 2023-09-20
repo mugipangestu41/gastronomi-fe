@@ -6,7 +6,7 @@ import { useState } from 'react';
 // @mui
 import {
   // Card,
-  Table,
+  // Table,
   // Stack,
   Paper,
   // Avatar,
@@ -15,12 +15,12 @@ import {
   // Checkbox,
   TableRow,
   // MenuItem,
-  TableBody,
+  // TableBody,
   TableCell,
   Container,
   Typography,
   // IconButton,
-  TableContainer,
+  // TableContainer,
   TablePagination,
   Grid,
 } from '@mui/material';
@@ -40,19 +40,19 @@ import {
 } from '../sections/@dashboard/app';
 import Scrollbar from '../components/scrollbar';
 // sections
-import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
+import { UserListToolbar } from '../sections/@dashboard/user';
 // mock
 import USERLIST from '../_mock/user';
 
 
-const TABLE_HEAD = [
-  { id: 'name', label: 'Name', alignRight: false },
-  { id: 'company', label: 'Company', alignRight: false },
-  { id: 'role', label: 'Role', alignRight: false },
-  { id: 'isVerified', label: 'Verified', alignRight: false },
-  { id: 'status', label: 'Status', alignRight: false },
-  { id: '' },
-];
+// const TABLE_HEAD = [
+//   { id: 'name', label: 'Name', alignRight: false },
+//   { id: 'company', label: 'Company', alignRight: false },
+//   { id: 'role', label: 'Role', alignRight: false },
+//   { id: 'isVerified', label: 'Verified', alignRight: false },
+//   { id: 'status', label: 'Status', alignRight: false },
+//   { id: '' },
+// ];
 
 // ----------------------------------------------------------------------
 
@@ -96,11 +96,11 @@ export default function KudapanPage() {
 
   const [page, setPage] = useState(0);
 
-  const [order, setOrder] = useState('asc');
+  const order = 'asc'
 
-  const [selected, setSelected] = useState([]);
+  const selected = []
 
-  const [orderBy, setOrderBy] = useState('name');
+  const orderBy = 'name'
 
   const [filterName, setFilterName] = useState('');
 
@@ -114,20 +114,20 @@ export default function KudapanPage() {
   //   setOpen(null);
   // };
 
-  const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
-  };
+  // const handleRequestSort = (event, property) => {
+  //   const isAsc = orderBy === property && order === 'asc';
+  //   setOrder(isAsc ? 'desc' : 'asc');
+  //   setOrderBy(property);
+  // };
 
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelecteds = USERLIST.map((n) => n.name);
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
-  };
+  // const handleSelectAllClick = (event) => {
+  //   if (event.target.checked) {
+  //     const newSelecteds = USERLIST.map((n) => n.name);
+  //     setSelected(newSelecteds);
+  //     return;
+  //   }
+  //   setSelected([]);
+  // };
 
   // const handleClick = (event, name) => {
   //   const selectedIndex = selected.indexOf(name);
@@ -170,7 +170,7 @@ export default function KudapanPage() {
         <title> Dashboard | Minimal UI </title>
       </Helmet>
 
-      <Container maxWidth="lg">
+      <Container maxWidth="md">
      
         <Typography variant="h4" sx={{ mb: 5 }}>
           Kudapan di Kecamatan {`${kecamatanName}`}
@@ -182,18 +182,7 @@ export default function KudapanPage() {
           <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
         
           <Scrollbar>
-            <TableContainer sx={{ minWidth: 200 }}>
-              <Table>
-                <UserListHead
-                  order={order}
-                  orderBy={orderBy}
-                  headLabel={TABLE_HEAD}
-                  rowCount={USERLIST.length}
-                  numSelected={selected.length}
-                  onRequestSort={handleRequestSort}
-                  onSelectAllClick={handleSelectAllClick}
-                />
-                <TableBody>
+              
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                     const { id, name, 
                       // role, status, company, 
@@ -206,7 +195,7 @@ export default function KudapanPage() {
 
                     
                       <Grid key={id} container spacing={3} style={{marginBottom:"10px"}}>
-                      <Grid item xs={12} sm={6} md={6}>
+                      <Grid item xs={12} sm={12} md={12}>
                         <AppWidgetSummary image={avatarUrl} title={name} total={714000} icon={'ant-design:android-filled'} />
                       </Grid>
                       </Grid>
@@ -218,12 +207,9 @@ export default function KudapanPage() {
                       <TableCell colSpan={6} />
                     </TableRow>
                   )}
-                </TableBody>
 
                 {isNotFound && (
-                  <TableBody>
-                    <TableRow>
-                      <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
+                  
                         <Paper
                           sx={{
                             textAlign: 'center',
@@ -239,12 +225,8 @@ export default function KudapanPage() {
                             <br /> Try checking for typos or using complete words.
                           </Typography>
                         </Paper>
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
+                      
                 )}
-              </Table>
-            </TableContainer>
           </Scrollbar>
 
           <TablePagination

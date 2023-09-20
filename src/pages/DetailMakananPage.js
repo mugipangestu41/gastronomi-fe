@@ -43,29 +43,18 @@ export default function DetailMakananPage() {
           backgroundSize: "cover", backgroundRepeat: "no-repeat", height: "100vh",maxHeight:"300px"}}/>
           </Grid>
 
-          <Grid item xs={12} md={4} lg={4}>
+          <Grid item xs={12} sm={6} md={4} lg={4}>
           <Paper style={{backgroundImage: 'url("http://localhost:3000/assets/map-lembang.jpg")', 
           backgroundSize: "cover", backgroundRepeat: "no-repeat", height: "100vh",maxHeight:"300px"}}/>
             
           </Grid>
 
          
-
-          <Grid item xs={12} md={6} lg={8}>
-            <Card>
-              <div style={{marginLeft:"10px", marginTop:"10px", marginBottom:"10px", marginRight:"10px"}}>
-            <Typography variant='h5'>Ketan Bakar</Typography>
-            {/* <Typography variant='subtitle1'>Menjelajah Gastronomi Bandung Barat bersama Renita</Typography> */}
-            <Divider variant="fullWidth" style={{ margin: "10px 0"}}/>
-            <Typography variant='subtitle2' style={{textAlign:"justify"}}>
-            Penjelasan filosopi, sejarah, tradisi, dan sosial
-            </Typography>
-            </div>
-            </Card>
-          </Grid>
+          <Grid item xs={0} md={0} lg={8} style={{marginTop: "-20px"}}/>
+          
 
           <Grid item xs={12} md={4} lg={4}>
-            <Card>
+            {/* <Card> */}
               <div style={{marginLeft:"10px", marginTop:"10px", marginBottom:"10px", marginRight:"10px"}}>
               {/* <Typography variant='h5'>Infografis</Typography> */}
               <center style={{marginTop:"10px"}}>
@@ -76,8 +65,21 @@ export default function DetailMakananPage() {
               {/* <img width={"150px"} src="http://localhost:3000/assets/gastro.jpeg" alt='infografis'/> */}
               </center>
               </div>
-            </Card>
+            {/* </Card> */}
             
+          </Grid>
+
+          <Grid item xs={12} md={12} lg={12}>
+            <Card>
+              <div style={{marginLeft:"10px", marginTop:"10px", marginBottom:"10px", marginRight:"10px"}}>
+            <Typography variant='h5'>Ketan Bakar</Typography>
+            {/* <Typography variant='subtitle1'>Menjelajah Gastronomi Bandung Barat bersama Renita</Typography> */}
+            <Divider variant="fullWidth" style={{ margin: "10px 0"}}/>
+            <Typography variant='subtitle2' style={{textAlign:"justify"}}>
+            Penjelasan filosopi, sejarah, tradisi, dan sosial
+            </Typography>
+            </div>
+            </Card>
           </Grid>
 
           <Grid item xs={12} md={4} lg={4}>

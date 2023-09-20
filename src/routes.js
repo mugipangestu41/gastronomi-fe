@@ -2,6 +2,7 @@ import { Navigate, useRoutes } from 'react-router-dom';
 // layouts
 import DashboardLayout from './layouts/dashboard';
 import SimpleLayout from './layouts/simple';
+import AdminDashboardLayout from './layouts/admin';
 //
 import BlogPage from './pages/BlogPage';
 import UserPage from './pages/UserPage';
@@ -14,6 +15,16 @@ import KudapanPage from './pages/KudapanPage';
 import RumahMakanPage from './pages/RumahMakanPage';
 import DetailRumahMakanPage from './pages/DetailRumahMakanPage';
 import DetailMakananPage from './pages/DetailMakananPage';
+import LoginPage from './pages/LoginPage';
+import AddKecamatanPage from './layouts/admin/pages/AddKecamatanPage';
+import KecamatanPage from './layouts/admin/pages/KecamatanPage';
+import EditKecamatanPage from './layouts/admin/pages/EditKecamatanPage';
+import EditBerandaPage from './layouts/admin/pages/EditBerandaPage';
+import SliderPage from './layouts/admin/pages/sliderPage';
+import AddSliderPage from './layouts/admin/pages/addSliderPage';
+import AdminKudapan from './layouts/admin/pages/AdminkudapanPage';
+import EditKudapanPage from './layouts/admin/pages/EditKudapanPage';
+import AddKudapanPage from './layouts/admin/pages/addKudapanPage';
 
 // ----------------------------------------------------------------------
 
@@ -35,10 +46,26 @@ export default function Router() {
         { path: 'blog', element: <BlogPage /> },
       ],
     },
-    // {
-    //   path: 'login',
-    //   element: <LoginPage />,
-    // },
+    {
+      path: '/admin',
+      element: <AdminDashboardLayout />,
+      children: [
+        { element: <Navigate to="/admin/kecamatan" />, index: true },
+        { path: 'addKecamatanPage', element: <AddKecamatanPage /> },
+        { path: 'kecamatan', element: <KecamatanPage /> },
+        { path: 'editKecamatan/:slug/:slug', element: <EditKecamatanPage /> },
+        { path: 'beranda', element: <EditBerandaPage />},
+        { path: 'slider', element: <SliderPage />},
+        { path: 'addSliderPage', element: <AddSliderPage />},
+        { path: 'kudapan/:slug/:slug', element: <AdminKudapan /> },
+        { path: 'editKudapan/:slug', element: <EditKudapanPage /> },
+        { path: 'addKudapanPage/:slug/:slug', element:< AddKudapanPage/> }
+      ],
+    },
+    {
+      path: 'login',
+      element: <LoginPage />,
+    },
     {
       element: <SimpleLayout />,
       children: [

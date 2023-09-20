@@ -52,7 +52,7 @@ export default function AppWidgetSummary(
           backgroundSize: "cover", backgroundRepeat: "no-repeat", height: "100vh",maxHeight:"220px"}}/>
       </Grid>
 
-      <Grid item xs={1} sm={6} md={3} style={{marginTop: "10px", marginBottom: "10px"}}>
+      <Grid item xs={5} sm={5} md={5} style={{marginTop: "10px", marginBottom: "10px"}}>
 
         
         <Typography style={{textAlign:"left"}} variant="h4">Ketan Bakar</Typography>

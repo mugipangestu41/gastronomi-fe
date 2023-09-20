@@ -6,7 +6,7 @@ import { useState } from 'react';
 // @mui
 import {
   // Card,
-  Table,
+  // Table,
   // Stack,
   Paper,
   // Avatar,
@@ -15,7 +15,7 @@ import {
   // Checkbox,
   TableRow,
   MenuItem,
-  TableBody,
+  // TableBody,
   TableCell,
   Container,
   Typography,
@@ -40,21 +40,12 @@ import {
 } from '../sections/@dashboard/app';
 import Scrollbar from '../components/scrollbar';
 // sections
-import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
+import { UserListToolbar } from '../sections/@dashboard/user';
 // mock
 import USERLIST from '../_mock/user';
 
 
 // ----------------------------------------------------------------------
-
-const TABLE_HEAD = [
-  { id: 'name', label: 'Name', alignRight: false },
-  { id: 'company', label: 'Company', alignRight: false },
-  { id: 'role', label: 'Role', alignRight: false },
-  { id: 'isVerified', label: 'Verified', alignRight: false },
-  { id: 'status', label: 'Status', alignRight: false },
-  { id: '' },
-];
 
 // ----------------------------------------------------------------------
 
@@ -92,11 +83,9 @@ export default function UserPage() {
 
   const [page, setPage] = useState(0);
 
-  const [order, setOrder] = useState('asc');
+  const order = "asc"
 
-  const [selected, setSelected] = useState([]);
-
-  const [orderBy, setOrderBy] = useState('name');
+  const orderBy = "name"
 
   const [filterName, setFilterName] = useState('');
 
@@ -109,36 +98,6 @@ export default function UserPage() {
   const handleCloseMenu = () => {
     setOpen(null);
   };
-
-  const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
-  };
-
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelecteds = USERLIST.map((n) => n.name);
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
-  };
-
-  // const handleClick = (event, name) => {
-  //   const selectedIndex = selected.indexOf(name);
-  //   let newSelected = [];
-  //   if (selectedIndex === -1) {
-  //     newSelected = newSelected.concat(selected, name);
-  //   } else if (selectedIndex === 0) {
-  //     newSelected = newSelected.concat(selected.slice(1));
-  //   } else if (selectedIndex === selected.length - 1) {
-  //     newSelected = newSelected.concat(selected.slice(0, -1));
-  //   } else if (selectedIndex > 0) {
-  //     newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
-  //   }
-  //   setSelected(newSelected);
-  // };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -166,29 +125,19 @@ export default function UserPage() {
         <title> User | Minimal UI </title>
       </Helmet>
       
-      <Container>
+      <Container maxWidth="md">
       <Typography variant="h4" sx={{ mb: 5 }}>
           Pencarian
         </Typography>
         {/* <Card> */}
-          <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
+          <UserListToolbar filterName={filterName} onFilterName={handleFilterByName} />
           {
             filterName !== '' ?
 
             
           <Scrollbar>
             <TableContainer sx={{ minWidth: 200 }}>
-              <Table>
-                <UserListHead
-                  order={order}
-                  orderBy={orderBy}
-                  headLabel={TABLE_HEAD}
-                  rowCount={USERLIST.length}
-                  numSelected={selected.length}
-                  onRequestSort={handleRequestSort}
-                  onSelectAllClick={handleSelectAllClick}
-                />
-                <TableBody>
+        
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                     const { id, name, 
                       // role, status, company, 
@@ -201,39 +150,10 @@ export default function UserPage() {
 
                     
                       <Grid key={id} container spacing={2} style={{marginBottom:"10px"}}>
-                      <Grid item xs={12} sm={6} md={6} lg={12}>
+                      <Grid item xs={12} sm={12} md={12} lg={12}>
                         <AppWidgetSummary image={avatarUrl} title={name} total={714000} icon={'ant-design:android-filled'} />
                       </Grid>
                       </Grid>
-                     
-                      // <TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedUser}>
-                    
-                   
-                      //   <TableCell component="th" scope="row" padding="none">
-                      //     <Stack direction="row" alignItems="center" spacing={2}>
-                      //       <Avatar alt={name} src={avatarUrl} />
-                      //       <Typography variant="subtitle2" noWrap>
-                      //         {name}
-                      //       </Typography>
-                      //     </Stack>
-                      //   </TableCell>
-
-                      //   <TableCell align="left">{company}</TableCell>
-
-                      //   <TableCell align="left">{role}</TableCell>
-
-                      //   <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
-
-                      //   <TableCell align="left">
-                      //     <Label color={(status === 'banned' && 'error') || 'success'}>{sentenceCase(status)}</Label>
-                      //   </TableCell>
-
-                      //   <TableCell align="right">
-                      //     <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
-                      //       <Iconify icon={'eva:more-vertical-fill'} />
-                      //     </IconButton>
-                      //   </TableCell>
-                      // </TableRow>
                     );
                   })}
                   {emptyRows > 0 && (
@@ -241,32 +161,26 @@ export default function UserPage() {
                       <TableCell colSpan={6} />
                     </TableRow>
                   )}
-                </TableBody>
 
                 {isNotFound && (
-                  <TableBody>
-                    <TableRow>
-                      <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                        <Paper
-                          sx={{
-                            textAlign: 'center',
-                          }}
-                        >
-                          <Typography variant="h6" paragraph>
-                            Not found
-                          </Typography>
+                
+                  <Paper
+                    sx={{
+                      textAlign: 'center',
+                    }}
+                  >
+                    <Typography variant="h6" paragraph>
+                      Not found
+                    </Typography>
 
-                          <Typography variant="body2">
-                            No results found for &nbsp;
-                            <strong>&quot;{filterName}&quot;</strong>.
-                            <br /> Try checking for typos or using complete words.
-                          </Typography>
-                        </Paper>
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
+                    <Typography variant="body2">
+                      No results found for &nbsp;
+                      <strong>&quot;{filterName}&quot;</strong>.
+                      <br /> Try checking for typos or using complete words.
+                    </Typography>
+                  </Paper>
+               
                 )}
-              </Table>
             </TableContainer>
           </Scrollbar>
 :

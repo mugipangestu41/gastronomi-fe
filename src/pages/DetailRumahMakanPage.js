@@ -6,7 +6,7 @@ import { useState } from 'react';
 // @mui
 import {
   Card,
-  Table,
+  // Table,
   // Stack,
   Paper,
   // Avatar,
@@ -17,12 +17,12 @@ import {
   // Button,
   TableRow,
   // MenuItem,
-  TableBody,
+  // TableBody,
   TableCell,
   Container,
   Typography,
   // IconButton,
-  TableContainer,
+  // TableContainer,
   TablePagination,
   Grid,
 } from '@mui/material';
@@ -42,19 +42,9 @@ import {
 } from '../sections/@dashboard/app';
 import Scrollbar from '../components/scrollbar';
 // sections
-import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
+import { UserListToolbar } from '../sections/@dashboard/user';
 // mock
 import USERLIST from '../_mock/user';
-
-
-const TABLE_HEAD = [
-  { id: 'name', label: 'Name', alignRight: false },
-  { id: 'company', label: 'Company', alignRight: false },
-  { id: 'role', label: 'Role', alignRight: false },
-  { id: 'isVerified', label: 'Verified', alignRight: false },
-  { id: 'status', label: 'Status', alignRight: false },
-  { id: '' },
-];
 
 // ----------------------------------------------------------------------
 
@@ -98,11 +88,11 @@ export default function DetailRumahMakanPage() {
 
   const [page, setPage] = useState(0);
 
-  const [order, setOrder] = useState('asc');
+  const order = 'asc'
 
-  const [selected, setSelected] = useState([]);
+  const selected = []
 
-  const [orderBy, setOrderBy] = useState('name');
+  const orderBy = 'name'
 
   const [filterName, setFilterName] = useState('');
 
@@ -116,20 +106,7 @@ export default function DetailRumahMakanPage() {
   //   setOpen(null);
   // };
 
-  const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
-  };
 
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelecteds = USERLIST.map((n) => n.name);
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
-  };
 
   // const handleClick = (event, name) => {
   //   const selectedIndex = selected.indexOf(name);
@@ -179,12 +156,12 @@ export default function DetailRumahMakanPage() {
         </Typography>
 
         <Grid container spacing={3}>
-          <Grid item xs={12} sm={6} md={8}>
+          <Grid item xs={12} sm={6} md={8} lg={8}>
           <Paper style={{backgroundImage: 'url("http://localhost:3000/assets/balibu.jpg")', 
           backgroundSize: "cover", backgroundRepeat: "no-repeat", height: "100vh",maxHeight:"300px"}}/>
           </Grid>
 
-          <Grid item xs={12} md={4} lg={4}>
+          <Grid item xs={12} sm={6} md={6} lg={4}>
           <Paper style={{backgroundImage: 'url("http://localhost:3000/assets/map-balibu.jpg")', 
           backgroundSize: "cover", backgroundRepeat: "no-repeat", height: "100vh",maxHeight:"300px"}}/>
             
@@ -192,7 +169,23 @@ export default function DetailRumahMakanPage() {
 
          
 
-          <Grid item xs={12} md={6} lg={8}>
+          
+
+          <Grid item xs={0} md={0} lg={8} style={{marginTop: "-20px"}}/>
+          <Grid item xs={12} md={4} lg={4}>
+              <div style={{marginLeft:"10px", marginTop:"10px", marginBottom:"10px", marginRight:"10px"}}>
+              {/* <Typography variant='h5'>Infografis</Typography> */}
+              <center style={{marginTop:"10px"}}>
+                
+              <Typography variant='subtitle2'>Jl. Raya Tangkuban Parahu No.423A, Cibogo, Kec. Lembang, Kabupaten Bandung Barat, Jawa Barat 40391
+              </Typography>
+              {/* <img width={"150px"} src="http://localhost:3000/assets/gastro.jpeg" alt='infografis'/> */}
+              </center>
+              </div>
+            
+          </Grid>
+
+          <Grid item xs={12} md={12} lg={12}>
             <Card>
               <div style={{marginLeft:"10px", marginTop:"10px", marginBottom:"10px", marginRight:"10px"}}>
             <Typography variant='h5'>{kecamatanName}</Typography>
@@ -203,21 +196,6 @@ export default function DetailRumahMakanPage() {
             </Typography>
             </div>
             </Card>
-          </Grid>
-
-          <Grid item xs={12} md={4} lg={4}>
-            <Card >
-              <div style={{marginLeft:"10px", marginTop:"10px", marginBottom:"10px", marginRight:"10px"}}>
-              {/* <Typography variant='h5'>Infografis</Typography> */}
-              <center style={{marginTop:"10px"}}>
-                
-              <Typography variant='subtitle2'>Jl. Raya Tangkuban Parahu No.423A, Cibogo, Kec. Lembang, Kabupaten Bandung Barat, Jawa Barat 40391
-              </Typography>
-              {/* <img width={"150px"} src="http://localhost:3000/assets/gastro.jpeg" alt='infografis'/> */}
-              </center>
-              </div>
-            </Card>
-            
           </Grid>
          
           <Grid item xs={12} md={12} lg={12}>
@@ -230,18 +208,7 @@ export default function DetailRumahMakanPage() {
           <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
         
         <Scrollbar>
-          <TableContainer sx={{ minWidth: 200 }}>
-            <Table>
-              <UserListHead
-                order={order}
-                orderBy={orderBy}
-                headLabel={TABLE_HEAD}
-                rowCount={USERLIST.length}
-                numSelected={selected.length}
-                onRequestSort={handleRequestSort}
-                onSelectAllClick={handleSelectAllClick}
-              />
-              <TableBody>
+         
                 {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                   const { id, name, 
                     // role, status, company, 
@@ -254,7 +221,7 @@ export default function DetailRumahMakanPage() {
 
                   
                     <Grid key={id} container spacing={3} style={{marginBottom:"10px"}}>
-                    <Grid item xs={12} sm={6} md={6}>
+                    <Grid item xs={12} sm={12} md={12}>
                       <AppWidgetSummary image={avatarUrl} title={name} total={714000} icon={'ant-design:android-filled'} />
                     </Grid>
                     </Grid>
@@ -266,12 +233,9 @@ export default function DetailRumahMakanPage() {
                     <TableCell colSpan={6} />
                   </TableRow>
                 )}
-              </TableBody>
 
               {isNotFound && (
-                <TableBody>
-                  <TableRow>
-                    <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
+               
                       <Paper
                         sx={{
                           textAlign: 'center',
@@ -287,12 +251,8 @@ export default function DetailRumahMakanPage() {
                           <br /> Try checking for typos or using complete words.
                         </Typography>
                       </Paper>
-                    </TableCell>
-                  </TableRow>
-                </TableBody>
+                    
               )}
-            </Table>
-          </TableContainer>
         </Scrollbar>
 
         <TablePagination

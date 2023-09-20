@@ -1,24 +1,24 @@
 // @mui
 import PropTypes from 'prop-types';
-import { alpha, styled } from '@mui/material/styles';
+// import { styled } from '@mui/material/styles';
 import { Button, Card, Grid, Paper, Typography } from '@mui/material';
 // utils
-import { fShortenNumber } from '../../../utils/formatNumber';
+// import { fShortenNumber } from '../../../utils/formatNumber';
 // components
-import Iconify from '../../../components/iconify';
+// import Iconify from '../../../components/iconify';
 
 // ----------------------------------------------------------------------
 
-const StyledIcon = styled('div')(({ theme }) => ({
-  margin: 'auto',
-  display: 'flex',
-  borderRadius: '50%',
-  alignItems: 'center',
-  width: theme.spacing(8),
-  height: theme.spacing(8),
-  justifyContent: 'center',
-  marginBottom: theme.spacing(3),
-}));
+// const StyledIcon = styled('div')(({ theme }) => ({
+//   margin: 'auto',
+//   display: 'flex',
+//   borderRadius: '50%',
+//   alignItems: 'center',
+//   width: theme.spacing(8),
+//   height: theme.spacing(8),
+//   justifyContent: 'center',
+//   marginBottom: theme.spacing(3),
+// }));
 
 // ----------------------------------------------------------------------
 
@@ -33,7 +33,11 @@ AppRumahMakan.propTypes = {
 const str = `${window.location.pathname.split("/", 3)[2]}`;
 const kecamatanName = str.charAt(0).toUpperCase() + str.slice(1);
 
-export default function AppRumahMakan({ image, title, total, icon, color = 'primary', sx, ...other }) {
+export default function AppRumahMakan(
+  { 
+    // image, title, total, icon, color = 'primary', sx, 
+  ...other }
+  ) {
   return (
     <Card
       
@@ -46,7 +50,7 @@ export default function AppRumahMakan({ image, title, total, icon, color = 'prim
           backgroundSize: "cover", backgroundRepeat: "no-repeat", height: "100vh",maxHeight:"220px"}}/>
       </Grid>
 
-      <Grid item xs={1} sm={6} md={3} style={{marginTop: "10px", marginBottom: "10px"}}>
+      <Grid item xs={5} sm={5} md={5} lg={5} style={{marginTop: "10px", marginBottom: "10px"}}>
 
         
         <Typography style={{textAlign:"left"}} variant="h4">RM Balibu Lembang</Typography>

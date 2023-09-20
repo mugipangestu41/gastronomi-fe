@@ -23,11 +23,10 @@ import './beranda.css'
 
 export default function DashboardAppPage() {
   // const theme = useTheme();
-
   return (
     <div style={{backgroundColor: "white"}} >
       <Helmet>
-        <title> Dashboard | Minimal UI </title>
+        <title> Gastronita | Beranda </title>
       </Helmet>
 
       <Container maxWidth="lg">
