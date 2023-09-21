@@ -46,9 +46,6 @@ export default function DestinasiPage() {
         <title> Dashboard: Kecamatan | Minimal UI </title>
       </Helmet>
 
-{
-  console.log(kecamatan)
-}
       <Container>
         <Typography variant="h4" sx={{ mb: 5 }}>
           Kecamatan

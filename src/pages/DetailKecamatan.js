@@ -56,7 +56,7 @@ export default function DetailKecamatan() {
       <Container maxWidth="lg">
      
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Kecamatan Lembang
+          Kecamatan {kecamatan?.kecamatan}
         </Typography>
 
         <Grid container spacing={3}>

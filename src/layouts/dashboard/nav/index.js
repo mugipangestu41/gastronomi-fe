@@ -141,13 +141,13 @@ export default function Nav({ openNav, onCloseNav }) {
         <ul style={{marginLeft: "10px"}}>
           
           <li>
-            <NavLink to="/beranda">Beranda</NavLink>
+            <NavLink onClick={handleShowNavbar} to="/beranda">Beranda</NavLink>
           </li>
           <li>
-            <NavLink to="/pencarian">Pencarian</NavLink>
+            <NavLink onClick={handleShowNavbar} to="/pencarian">Pencarian</NavLink>
           </li>
           <li>
-            <NavLink to="/destinasi">Destinasi</NavLink>
+            <NavLink onClick={handleShowNavbar} to="/destinasi">Destinasi</NavLink>
           </li>
          
          

@@ -26,15 +26,16 @@ AppRumahMakan.propTypes = {
   color: PropTypes.string,
   icon: PropTypes.string,
   image: PropTypes.string,
-  title: PropTypes.string.isRequired,
-  total: PropTypes.number.isRequired,
   sx: PropTypes.object,
+  id: PropTypes.string,
+  rumahMakan: PropTypes.string,
+  kecamatan: PropTypes.string
 };
-const str = `${window.location.pathname.split("/", 3)[2]}`;
-const kecamatanName = str.charAt(0).toUpperCase() + str.slice(1);
+
+const BACKEND_API = process.env.REACT_APP_BE
 
 export default function AppRumahMakan(
-  { 
+  { id, image, rumahMakan, kecamatan,
     // image, title, total, icon, color = 'primary', sx, 
   ...other }
   ) {
@@ -46,20 +47,20 @@ export default function AppRumahMakan(
     >
       <Grid container spacing={2}>\
       <Grid item xs={6} sm={6} md={6}>
-        <Paper style={{backgroundImage: 'url("http://localhost:3000/assets/balibu.jpg")', 
+        <Paper style={{backgroundImage: `url(${BACKEND_API}${image})`, 
           backgroundSize: "cover", backgroundRepeat: "no-repeat", height: "100vh",maxHeight:"220px"}}/>
       </Grid>
 
       <Grid item xs={5} sm={5} md={5} lg={5} style={{marginTop: "10px", marginBottom: "10px"}}>
 
         
-        <Typography style={{textAlign:"left"}} variant="h4">RM Balibu Lembang</Typography>
+        <Typography style={{textAlign:"left"}} variant="h4">{rumahMakan}</Typography>
 
         <Typography style={{textAlign:"left"}} variant="subtitle1" sx={{ opacity: 0.72 }}>
-          Kecamatan Lembang
+          Kecamatan {kecamatan}
         </Typography>
         {/* /uuid-rumah-makan */}
-       <Button href={`/rumah-makan/${kecamatanName}/Balibu` }style={{marginTop: "35px", marginLeft:"-10px"}}>Selengkapnya</Button>
+       <Button href={`/rumah-makan/${id}/${rumahMakan}` }style={{marginTop: "35px", marginLeft:"-10px"}}>Selengkapnya</Button>
       </Grid>
       </Grid>
       

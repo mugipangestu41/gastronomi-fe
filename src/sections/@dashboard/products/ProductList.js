@@ -13,7 +13,7 @@ export default function ProductList({ kecamatan, ...other }) {
   return (
     <Grid container spacing={3} {...other}>
       {kecamatan.map((kec) => (
-        <Grid key={kec.id} item xs={12} sm={6} md={3}>
+        <Grid key={kec.id} item xs={6} sm={6} md={3}>
           <ShopProductCard kecamatans={kec} />
           
         </Grid>

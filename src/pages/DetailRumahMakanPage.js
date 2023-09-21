@@ -1,7 +1,9 @@
 import { Helmet } from 'react-helmet-async';
 import { filter } from 'lodash';
+import axios from 'axios';
+/* eslint-disable camelcase */
 // import { sentenceCase } from 'change-case';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 // import { useTheme } from '@mui/material/styles';
 // @mui
 import {
@@ -44,7 +46,6 @@ import Scrollbar from '../components/scrollbar';
 // sections
 import { UserListToolbar } from '../sections/@dashboard/user';
 // mock
-import USERLIST from '../_mock/user';
 
 // ----------------------------------------------------------------------
 
@@ -73,7 +74,7 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(array, (_user) => _user.nama_makanan.toLowerCase().indexOf(query.toLowerCase()) !== -1);
   }
   return stabilizedThis.map((el) => el[0]);
 }
@@ -81,9 +82,51 @@ function applySortFilter(array, comparator, query) {
 
 export default function DetailRumahMakanPage() {
   // const theme = useTheme();
-  const str = `${window.location.pathname.split("/", 4)[3]}`;
-  const kecamatanName = str.charAt(0).toUpperCase() + str.slice(1);
+  const wKecamatan = window.location.pathname.split('/')[3].includes('%20') ? window.location.pathname.split('/')[3].replaceAll('%20', ' ') : window.location.pathname.split('/')[3]
+  const kecamatanName = wKecamatan.charAt(0).toUpperCase() + wKecamatan.slice(1);
 
+  const wId = window.location.pathname.split('/')[2]
+
+
+  const API_URL = process.env.REACT_APP_API
+  const BACKEND_API = process.env.REACT_APP_BE
+  const [detailRumahMakan, setDetailRumahMakan] = useState([])
+  const getDetailRumahMakan = async () => {
+    try {
+      await axios.get(`${API_URL}join/rumahMakanById?id_rumah_makan=${wId}`)
+      .then(({data}) => {
+       setDetailRumahMakan(data?.data[0])
+      })
+      .catch((err) =>
+      {if(err.response.status === 404){
+        setDetailRumahMakan([])
+      }})
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
+  const [allMenu, setAllMenu] = useState([])
+  const getAllMenuByIdRumahMakan = async () => {
+    try {
+      await axios.get(`${API_URL}join/allMenuByIdRumahMakan?id_rumah_makan=${wId}`)
+      .then(({data}) => {
+       setAllMenu(data?.data)
+      })
+      .catch((err) =>
+      {if(err.response.status === 404){
+        setAllMenu([])
+      }})
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  useEffect(() => {
+    getAllMenuByIdRumahMakan()
+    getDetailRumahMakan()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   // const [open, setOpen] = useState(null);
 
   const [page, setPage] = useState(0);
@@ -97,31 +140,6 @@ export default function DetailRumahMakanPage() {
   const [filterName, setFilterName] = useState('');
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
-
-  // const handleOpenMenu = (event) => {
-  //   setOpen(event.currentTarget);
-  // };
-
-  // const handleCloseMenu = () => {
-  //   setOpen(null);
-  // };
-
-
-
-  // const handleClick = (event, name) => {
-  //   const selectedIndex = selected.indexOf(name);
-  //   let newSelected = [];
-  //   if (selectedIndex === -1) {
-  //     newSelected = newSelected.concat(selected, name);
-  //   } else if (selectedIndex === 0) {
-  //     newSelected = newSelected.concat(selected.slice(1));
-  //   } else if (selectedIndex === selected.length - 1) {
-  //     newSelected = newSelected.concat(selected.slice(0, -1));
-  //   } else if (selectedIndex > 0) {
-  //     newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
-  //   }
-  //   setSelected(newSelected);
-  // };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -137,9 +155,9 @@ export default function DetailRumahMakanPage() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - allMenu.length) : 0;
 
-  const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(allMenu, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
@@ -157,18 +175,19 @@ export default function DetailRumahMakanPage() {
 
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={8} lg={8}>
-          <Paper style={{backgroundImage: 'url("http://localhost:3000/assets/balibu.jpg")', 
-          backgroundSize: "cover", backgroundRepeat: "no-repeat", height: "100vh",maxHeight:"300px"}}/>
+          <Paper style={detailRumahMakan?.image1 !== undefined ? 
+          {backgroundImage: `url(${BACKEND_API}${detailRumahMakan?.image1})`, 
+          backgroundSize: "cover", backgroundRepeat: "no-repeat", height: "100vh",maxHeight:"300px"}
+          : {}}/>
           </Grid>
 
           <Grid item xs={12} sm={6} md={6} lg={4}>
-          <Paper style={{backgroundImage: 'url("http://localhost:3000/assets/map-balibu.jpg")', 
-          backgroundSize: "cover", backgroundRepeat: "no-repeat", height: "100vh",maxHeight:"300px"}}/>
+          <Paper style={ detailRumahMakan?.image2 !== undefined ? 
+          {backgroundImage: `url(${BACKEND_API}${detailRumahMakan?.image2})`, 
+          backgroundSize: "cover", backgroundRepeat: "no-repeat", height: "100vh",maxHeight:"300px"}
+          : {}}/>
             
           </Grid>
-
-         
-
           
 
           <Grid item xs={0} md={0} lg={8} style={{marginTop: "-20px"}}/>
@@ -177,7 +196,8 @@ export default function DetailRumahMakanPage() {
               {/* <Typography variant='h5'>Infografis</Typography> */}
               <center style={{marginTop:"10px"}}>
                 
-              <Typography variant='subtitle2'>Jl. Raya Tangkuban Parahu No.423A, Cibogo, Kec. Lembang, Kabupaten Bandung Barat, Jawa Barat 40391
+              <Typography variant='subtitle2'>
+                {detailRumahMakan?.alamat}
               </Typography>
               {/* <img width={"150px"} src="http://localhost:3000/assets/gastro.jpeg" alt='infografis'/> */}
               </center>
@@ -188,11 +208,10 @@ export default function DetailRumahMakanPage() {
           <Grid item xs={12} md={12} lg={12}>
             <Card>
               <div style={{marginLeft:"10px", marginTop:"10px", marginBottom:"10px", marginRight:"10px"}}>
-            <Typography variant='h5'>{kecamatanName}</Typography>
+            <Typography variant='h5'>{detailRumahMakan?.nama_rumah_makan}</Typography>
             <Divider variant="fullWidth" style={{ margin: "10px 0"}}/>
-            <Typography variant='subtitle2' style={{textAlign:"justify"}}>
-            Makanan khas tradisional Sunda tersedia di kedai halal dan kasual ini, dengan taman dan taman bermain.
-            </Typography>
+            {/* eslint-disable-next-line  */}
+            <div style={{textAlign:"justify"}} dangerouslySetInnerHTML={{__html: detailRumahMakan?.content}} />
             </div>
             </Card>
           </Grid>
@@ -208,19 +227,16 @@ export default function DetailRumahMakanPage() {
         <Scrollbar>
          
                 {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                  const { id, name, 
-                    // role, status, company, 
-                    avatarUrl, 
-                    // isVerified 
+                  const { id_makanan, nama_makanan, kecamatan, image1
                   } = row;
                   // const selectedUser = selected.indexOf(name) !== -1;
 
                   return (
 
                   
-                    <Grid key={id} container spacing={3} style={{marginBottom:"10px"}}>
+                    <Grid key={id_makanan} container spacing={3} style={{marginBottom:"10px"}}>
                     <Grid item xs={12} sm={12} md={12}>
-                      <AppWidgetSummary image={avatarUrl} title={name} total={714000} icon={'ant-design:android-filled'} />
+                      <AppWidgetSummary kecamatan={kecamatan} image={image1} id={id_makanan} makanan={nama_makanan}  icon={'ant-design:android-filled'} />
                     </Grid>
                     </Grid>
                    
@@ -256,7 +272,7 @@ export default function DetailRumahMakanPage() {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={USERLIST.length}
+          count={allMenu.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}

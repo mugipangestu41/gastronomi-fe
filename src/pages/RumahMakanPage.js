@@ -1,7 +1,8 @@
 import { Helmet } from 'react-helmet-async';
 import { filter } from 'lodash';
+import axios from 'axios';
 // import { sentenceCase } from 'change-case';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 // import { useTheme } from '@mui/material/styles';
 // @mui
 import {
@@ -43,7 +44,6 @@ import Scrollbar from '../components/scrollbar';
 // sections
 import { UserListToolbar } from '../sections/@dashboard/user';
 // mock
-import USERLIST from '../_mock/user';
 
 
 // const TABLE_HEAD = [
@@ -90,8 +90,8 @@ function applySortFilter(array, comparator, query) {
 
 export default function RumahMakanPage() {
   // const theme = useTheme();
-  const str = `${window.location.pathname.split("/", 3)[2]}`;
-  const rumahMakanId = str.charAt(0).toUpperCase() + str.slice(1);
+  const wKecamatan = window.location.pathname.split('/')[2].includes('%20') ? window.location.pathname.split('/')[2].replaceAll('%20', ' ') : window.location.pathname.split('/')[2]
+  const rumahMakanId = wKecamatan.charAt(0).toUpperCase() + wKecamatan.slice(1);
 
   // const [open, setOpen] = useState(null);
 
@@ -106,44 +106,28 @@ export default function RumahMakanPage() {
   const [filterName, setFilterName] = useState('');
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
-
-  // const handleOpenMenu = (event) => {
-  //   setOpen(event.currentTarget);
-  // };
-
-  // const handleCloseMenu = () => {
-  //   setOpen(null);
-  // };
-
-  // const handleRequestSort = (event, property) => {
-  //   const isAsc = orderBy === property && order === 'asc';
-  //   setOrder(isAsc ? 'desc' : 'asc');
-  //   setOrderBy(property);
-  // };
-
-  // const handleSelectAllClick = (event) => {
-  //   if (event.target.checked) {
-  //     const newSelecteds = USERLIST.map((n) => n.name);
-  //     setSelected(newSelecteds);
-  //     return;
-  //   }
-  //   setSelected([]);
-  // };
-
-  // const handleClick = (event, name) => {
-  //   const selectedIndex = selected.indexOf(name);
-  //   let newSelected = [];
-  //   if (selectedIndex === -1) {
-  //     newSelected = newSelected.concat(selected, name);
-  //   } else if (selectedIndex === 0) {
-  //     newSelected = newSelected.concat(selected.slice(1));
-  //   } else if (selectedIndex === selected.length - 1) {
-  //     newSelected = newSelected.concat(selected.slice(0, -1));
-  //   } else if (selectedIndex > 0) {
-  //     newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
-  //   }
-  //   setSelected(newSelected);
-  // };
+/* eslint-disable camelcase */
+  const API_URL = process.env.REACT_APP_API
+  const [rumahMakan, setRumahMakan] = useState([])
+  const getAllRumahMakanByKecamatan = async () => {
+    try {
+      await axios.get(`${API_URL}join/allRumahMakanByKecamatan?kecamatan=${wKecamatan}`)
+      .then(({data}) => {
+        // setDetailKecamatan(data?.data[0])
+        setRumahMakan(data?.data)
+      })
+      .catch((err) =>
+      {if(err.response.status === 404){
+        setRumahMakan([])
+      }})
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  useEffect(() => {
+    getAllRumahMakanByKecamatan()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -159,9 +143,9 @@ export default function RumahMakanPage() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rumahMakan.length) : 0;
 
-  const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(rumahMakan, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
@@ -177,6 +161,9 @@ export default function RumahMakanPage() {
           Rumah Makan di Kecamatan {`${rumahMakanId}`}
         </Typography>
 
+{
+  console.log(rumahMakan)
+}
 
  
         {/* <Card> */}
@@ -196,9 +183,9 @@ export default function RumahMakanPage() {
                 /> */}
                 {/* <TableBody> */}
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, 
+                    const { id_rumah_makan, nama_rumah_makan, kecamatan, image1
                       // role, status, company, 
-                      avatarUrl, 
+                      // avatarUrl, 
                       // isVerified 
                     } = row;
                     // const selectedUser = selected.indexOf(name) !== -1;
@@ -206,9 +193,9 @@ export default function RumahMakanPage() {
                     return (
 
                     
-                      <Grid key={id} container spacing={3} style={{marginBottom:"10px"}}>
+                      <Grid key={id_rumah_makan} container spacing={3} style={{marginBottom:"10px"}}>
                       <Grid item xs={12} sm={12} md={12}>
-                        <AppRumahMakan image={avatarUrl} title={name} total={714000} icon={'ant-design:android-filled'} />
+                        <AppRumahMakan id={id_rumah_makan} kecamatan={kecamatan} image={image1} rumahMakan={nama_rumah_makan} icon={'ant-design:android-filled'} />
                       </Grid>
                       </Grid>
                      
@@ -248,7 +235,7 @@ export default function RumahMakanPage() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={USERLIST.length}
+            count={rumahMakan.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

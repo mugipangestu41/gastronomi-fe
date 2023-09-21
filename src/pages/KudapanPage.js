@@ -1,7 +1,9 @@
 import { Helmet } from 'react-helmet-async';
 import { filter } from 'lodash';
+/* eslint-disable camelcase */
+import axios from 'axios';
 // import { sentenceCase } from 'change-case';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 // import { useTheme } from '@mui/material/styles';
 // @mui
 import {
@@ -42,7 +44,6 @@ import Scrollbar from '../components/scrollbar';
 // sections
 import { UserListToolbar } from '../sections/@dashboard/user';
 // mock
-import USERLIST from '../_mock/user';
 
 
 // const TABLE_HEAD = [
@@ -81,16 +82,38 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(array, (_user) => _user.nama_makanan.toLowerCase().indexOf(query.toLowerCase()) !== -1);
   }
   return stabilizedThis.map((el) => el[0]);
 }
 
 
 export default function KudapanPage() {
+  const wKecamatan = window.location.pathname.split('/')[2].includes('%20') ? window.location.pathname.split('/')[2].replaceAll('%20', ' ') : window.location.pathname.split('/')[2]
+  const API_URL = process.env.REACT_APP_API
+  const [kudapan, setKudapan] = useState([])
+  const getAllKudapanByKecamatan = async () => {
+    try {
+      await axios.get(`${API_URL}join/allKudapanByKecamatan?kecamatan=${wKecamatan}`)
+      .then(({data}) => {
+        // setDetailKecamatan(data?.data[0])
+        setKudapan(data?.data)
+      })
+      .catch((err) =>
+      {if(err.response.status === 404){
+        setKudapan([])
+      }})
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    getAllKudapanByKecamatan()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   // const theme = useTheme();
-  const str = `${window.location.pathname.split("/", 3)[2]}`;
-  const kecamatanName = str.charAt(0).toUpperCase() + str.slice(1);
+  const kecamatanName = wKecamatan.charAt(0).toUpperCase() + wKecamatan.slice(1);
 
   // const [open, setOpen] = useState(null);
 
@@ -106,44 +129,6 @@ export default function KudapanPage() {
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  // const handleOpenMenu = (event) => {
-  //   setOpen(event.currentTarget);
-  // };
-
-  // const handleCloseMenu = () => {
-  //   setOpen(null);
-  // };
-
-  // const handleRequestSort = (event, property) => {
-  //   const isAsc = orderBy === property && order === 'asc';
-  //   setOrder(isAsc ? 'desc' : 'asc');
-  //   setOrderBy(property);
-  // };
-
-  // const handleSelectAllClick = (event) => {
-  //   if (event.target.checked) {
-  //     const newSelecteds = USERLIST.map((n) => n.name);
-  //     setSelected(newSelecteds);
-  //     return;
-  //   }
-  //   setSelected([]);
-  // };
-
-  // const handleClick = (event, name) => {
-  //   const selectedIndex = selected.indexOf(name);
-  //   let newSelected = [];
-  //   if (selectedIndex === -1) {
-  //     newSelected = newSelected.concat(selected, name);
-  //   } else if (selectedIndex === 0) {
-  //     newSelected = newSelected.concat(selected.slice(1));
-  //   } else if (selectedIndex === selected.length - 1) {
-  //     newSelected = newSelected.concat(selected.slice(0, -1));
-  //   } else if (selectedIndex > 0) {
-  //     newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
-  //   }
-  //   setSelected(newSelected);
-  // };
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -158,9 +143,9 @@ export default function KudapanPage() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - kudapan.length) : 0;
 
-  const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(kudapan, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
@@ -171,7 +156,7 @@ export default function KudapanPage() {
       </Helmet>
 
       <Container maxWidth="md">
-     
+      
         <Typography variant="h4" sx={{ mb: 5 }}>
           Kudapan di Kecamatan {`${kecamatanName}`}
         </Typography>
@@ -184,9 +169,9 @@ export default function KudapanPage() {
           <Scrollbar>
               
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, 
+                    const { id, nama_makanan, kecamatan, image1,
                       // role, status, company, 
-                      avatarUrl, 
+                      // avatarUrl, 
                       // isVerified 
                     } = row;
                     // const selectedUser = selected.indexOf(name) !== -1;
@@ -196,7 +181,7 @@ export default function KudapanPage() {
                     
                       <Grid key={id} container spacing={3} style={{marginBottom:"10px"}}>
                       <Grid item xs={12} sm={12} md={12}>
-                        <AppWidgetSummary image={avatarUrl} title={name} total={714000} icon={'ant-design:android-filled'} />
+                        <AppWidgetSummary makanan={nama_makanan} id={id} image={image1} kecamatan={kecamatan} title={nama_makanan} total={714000} icon={'ant-design:android-filled'} />
                       </Grid>
                       </Grid>
                      
@@ -232,7 +217,7 @@ export default function KudapanPage() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={USERLIST.length}
+            count={kudapan.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
