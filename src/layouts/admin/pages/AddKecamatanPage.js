@@ -62,8 +62,7 @@ export default function AddKecamatanPage() {
             }
           }
         })
-        .then(({data}) => {
-          console.log(data)
+        .then(() => {
           setErrCreate(`Success data kecamatan ${kecamatans} ditambahkan`)
           // window.alert(`Success data kecamatan ${kecamatans} ditambahkan`)
           setKecamatan(null)
@@ -185,11 +184,11 @@ export default function AddKecamatanPage() {
       <Container maxWidth="md"> 
         <Grid container spacing={3}>
         <Grid item xs={12} sm={12} md={12}>
-        <p><a href='/admin'>Kecamatan</a> &#129058; <a style={{color:"black"}}>Add Kecamatan</a></p>
+        <p><a href='/admin'>Kecamatan</a> &#129058; <a style={{color:"black"}}>Tambah Kecamatan</a></p>
         </Grid>
           <Grid item xs={12} sm={12} md={12}>
             <h5>{errCreate}</h5>
-            <h1>Add Kecamatan</h1>
+            <h3>Tambah Kecamatan</h3>
             <form id='myform'>
             <Stack spacing={2} m={2}>
               

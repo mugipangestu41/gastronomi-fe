@@ -5,7 +5,7 @@ import { styled } from '@mui/material/styles';
 // utils
 // import { fCurrency } from '../../../utils/formatNumber';
 // components
-import Label from '../../../components/label';
+// import Label from '../../../components/label';
 // import { ColorPreview } from '../../../components/color-utils';
 
 // ----------------------------------------------------------------------
@@ -21,16 +21,17 @@ const StyledProductImg = styled('img')({
 // ----------------------------------------------------------------------
 
 ShopProductCard.propTypes = {
-  product: PropTypes.object,
+  kecamatans: PropTypes.object
 };
 
-export default function ShopProductCard({ product }) {
-  const { name, cover, status } = product;
+export default function ShopProductCard({ kecamatans }) {
+  const BACKEND_API = process.env.REACT_APP_BE
+  const { image1, kecamatan } = kecamatans;
 
   return (
     <Card>
       <Box sx={{ pt: '100%', position: 'relative' }}>
-        {status && (
+        {/* {status && (
           <Label
             variant="filled"
             color={(status === 'sale' && 'error') || 'info'}
@@ -44,22 +45,20 @@ export default function ShopProductCard({ product }) {
           >
             {status}
           </Label>
-        )}
-        {
-          console.log("cover", cover)
-        }
-        <StyledProductImg alt={name} src="assets/lembang.jpg" />
+        )} */}
+       
+        <StyledProductImg alt={kecamatan} src={`${BACKEND_API}${image1}`} />
       </Box>
 
       <Stack spacing={2} sx={{ p: 3 }}>
         <Link color="inherit" underline="hover">
           <Typography variant="subtitle2" noWrap>
-            {name}
+            {kecamatan}
           </Typography>
         </Link>
 
         <Stack direction="row" alignItems="center" justifyContent="space-between">
-          <Button variant='contained'color='inherit' href='/detail-kecamatan'>Selengkapnya</Button>
+          <Button variant='contained'color='inherit' href={`/detail-kecamatan/${kecamatan}`}>Selengkapnya</Button>
         </Stack>
       </Stack>
     </Card>

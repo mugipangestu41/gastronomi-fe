@@ -38,7 +38,7 @@ import { UserListHead2, UserListToolbar } from '../../../sections/@dashboard/use
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'nama_makanan', label: 'Nama Makanan', alignRight: false },
+  { id: 'rumah_makan', label: 'Rumah Makan', alignRight: false },
   { id: '' },
 ];
 
@@ -73,7 +73,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function AdminKudapanPage() {
+export default function AdminRumahMakanPage() {
   const [open, setOpen] = useState(null);
 
   const [page, setPage] = useState(0);
@@ -82,7 +82,7 @@ export default function AdminKudapanPage() {
 
   const [selected, setSelected] = useState([]);
 
-  const [orderBy, setOrderBy] = useState('kudapan');
+  const [orderBy, setOrderBy] = useState('rumahMakan');
 
   const [filterName, setFilterName] = useState('');
 
@@ -90,15 +90,15 @@ export default function AdminKudapanPage() {
 
   const navigate = useNavigate();
 
-  const [kudapan, setKudapan] = useState([])
+  const [rumahMakan, setRumahMakan] = useState([])
 
   useEffect(() => {
-    localStorage.setItem("kudapan", window.location.pathname)
+    localStorage.setItem("rumahMakan", window.location.pathname)
     if(localStorage.getItem("token") == null) { 
       navigate("/login")
       window.location.reload()
     }
-    getKudapan()
+    getRumahMakan()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   
@@ -107,11 +107,11 @@ export default function AdminKudapanPage() {
   const headers = {'Authorization': `Bearer ${localStorage.getItem('token')}`}
   const wKecamatan = window.location.pathname.split('/')[3].includes('%20') ? window.location.pathname.split('/')[3].replaceAll('%20', ' ') : window.location.pathname.split('/')[3]
   const wId = window.location.pathname.split('/')[4]
-  const getKudapan = async () => {
+  const getRumahMakan = async () => {
     try {
-      await axios.get(`${API_URL}join/allKudapanByKecamatan?kecamatan=${wKecamatan}`, {headers})
+      await axios.get(`${API_URL}join/allRumahMakanByKecamatan?kecamatan=${wKecamatan}`, {headers})
       .then(({data}) => {
-        setKudapan(data?.data)
+        setRumahMakan(data?.data)
       })
       .catch((err) =>
       {
@@ -121,7 +121,7 @@ export default function AdminKudapanPage() {
           console.log("auth failed")
         }
         if(err.response.status === 404){
-          setKudapan([])
+          setRumahMakan([])
         }
     })
     } catch (error) {
@@ -132,9 +132,9 @@ export default function AdminKudapanPage() {
   const handleDelete = async () => {
     try {
       handleCloseMenu();
-      axios.delete(`${API_URL}kudapan/deleteMakananById?id=${clickedId}`, {headers})
+      axios.delete(`${API_URL}rumahMakan/deleteRumahMakanById?id=${clickedId}`, {headers})
       .then(() => {
-        getKudapan();
+        getRumahMakan();
       })
       .catch((err) => {
         console.log(err)
@@ -161,18 +161,18 @@ export default function AdminKudapanPage() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = kudapan.map((n) => n.kudapan);
+      const newSelecteds = rumahMakan.map((n) => n.rumahMakan);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  // const handleClick = (event, kudapan) => {
-  //   const selectedIndex = selected.indexOf(kudapan);
+  // const handleClick = (event, rumahMakan) => {
+  //   const selectedIndex = selected.indexOf(rumahMakan);
   //   let newSelected = [];
   //   if (selectedIndex === -1) {
-  //     newSelected = newSelected.concat(selected, kudapan);
+  //     newSelected = newSelected.concat(selected, rumahMakan);
   //   } else if (selectedIndex === 0) {
   //     newSelected = newSelected.concat(selected.slice(1));
   //   } else if (selectedIndex === selected.length - 1) {
@@ -197,16 +197,16 @@ export default function AdminKudapanPage() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - kudapan.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rumahMakan.length) : 0;
 
-  const filteredUsers = applySortFilter(kudapan, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(rumahMakan, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
   return (
     <>
       <Helmet>
-        <title> Kudapan | Minimal UI </title>
+        <title> RumahMakan | Minimal UI </title>
       </Helmet>
 
       <Container maxWidth="md">
@@ -215,7 +215,7 @@ export default function AdminKudapanPage() {
           <Grid item xs={12} sm={12} md={12}>
           <p><a href='/admin'>Kecamatan</a> &#129058;
           &nbsp;<a href={`${localStorage.getItem('editKecamatan')}`} >Edit Kecamatan</a> &#129058;
-          &nbsp;<a style={{color:"black"}}>Kudapan</a> 
+          &nbsp;<a style={{color:"black"}}>Rumah Makan</a> 
           </p>
           </Grid>
           :
@@ -223,10 +223,10 @@ export default function AdminKudapanPage() {
         }
        
           <Typography variant="h4" gutterBottom>
-            Kudapan di Kecamatan {`${wKecamatan}`}
+            Rumah Makan di Kecamatan {`${wKecamatan}`}
           </Typography>
-          <Button style={{marginBottom:"15px"}} href={`/admin/addKudapanPage/${wKecamatan}/${wId}`} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
-            Kudapan
+          <Button style={{marginBottom:"15px"}} href={`/admin/addRumahMakanPage/${wKecamatan}/${wId}`} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
+            Rumah Makan
           </Button>
 
         <Card>
@@ -239,30 +239,30 @@ export default function AdminKudapanPage() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={kudapan.length}
+                  rowCount={rumahMakan.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, nama_makanan} = row;
-                    const selectedUser = selected.indexOf(kudapan) !== -1;
+                    const { id_rumah_makan, nama_rumah_makan} = row;
+                    const selectedUser = selected.indexOf(rumahMakan) !== -1;
 
                     return (
-                      <TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedUser}>
+                      <TableRow hover key={id_rumah_makan} tabIndex={-1} role="checkbox" selected={selectedUser}>
                         {/* <TableCell padding="checkbox">
-                          <Checkbox checked={selectedUser} onChange={(event) => handleClick(event, kudapan)} />
+                          <Checkbox checked={selectedUser} onChange={(event) => handleClick(event, rumahMakan)} />
                         </TableCell> */}
 
                         <TableCell component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="center" spacing={2}>
-                            <a style={{marginLeft: "15px"}} href={`/admin/editKudapan/${id}`}>{nama_makanan}</a>
+                            <a style={{marginLeft: "15px"}} href={`/admin/editRumahMakan/${id_rumah_makan}`}>{nama_rumah_makan}</a>
                           </Stack>
                         </TableCell>
 
                         <TableCell align="right">
-                          <IconButton size="large" color="inherit" onClick={(event) => {handleOpenMenu(event, id)}}>
+                          <IconButton size="large" color="inherit" onClick={(event) => {handleOpenMenu(event, id_rumah_makan)}}>
                             <Iconify icon={'eva:more-vertical-fill'}/>
                           </IconButton>
                         </TableCell>
@@ -306,7 +306,7 @@ export default function AdminKudapanPage() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={kudapan.length}
+            count={rumahMakan.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

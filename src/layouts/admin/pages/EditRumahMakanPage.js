@@ -30,7 +30,7 @@ import 'react-quill/dist/quill.snow.css';
 
 // ----------------------------------------------------------------------
 
-export default function EditKudapanPage() {
+export default function EditRumahMakanPage() {
   // const theme = useTheme();
   // const navigate = useNavigate();
   const navigate = useNavigate();
@@ -42,7 +42,7 @@ export default function EditKudapanPage() {
   const [errCreate, setErrCreate] = useState('')
   const [errCreateImage1, setErrCreateImage1] = useState('')
   const [errCreateImage2, setErrCreateImage2] = useState('')
-  // const [detailKudapan, setDetailKudapan] = useState([])
+  // const [detailRumahMakan, setDetailRumahMakan] = useState([])
   const [image1, setImage1] = useState('')
   const [tempImage1, setTempImage1] = useState()
   const [tempImage2, setTempImage2] = useState()
@@ -69,8 +69,8 @@ export default function EditKudapanPage() {
   const API_URL = process.env.REACT_APP_API
   const BACKEND_API = process.env.REACT_APP_BE
   const headers = {'Authorization': `Bearer ${localStorage.getItem('token')}`}
-  const [nama_makanans, setNamaMakanan] = useState('')
-  const [alamat_makanans, setAlamatMakanan] = useState('')
+  const [nama_rumah_makans, setNamaRumahMakan] = useState('')
+  const [alamats, setAlamat] = useState('')
   const [id_kecamatans, setIdKecamatan] = useState('')
   const [kecamatans, setKecamatan] = useState([])
 
@@ -97,14 +97,14 @@ export default function EditKudapanPage() {
   }
 
 
-  const getDetailKudapan = async () => {
+  const getDetailRumahMakan = async () => {
     try {
-      await axios.get(`${API_URL}join/makananById?id_makanan=${wId}`, {headers})
+      await axios.get(`${API_URL}join/rumahMakanById?id_rumah_makan=${wId}`, {headers})
       .then(({data}) => {
-        // setDetailKudapan(data?.data[0])
+        // setDetailRumahMakan(data?.data[0])
         setIdKecamatan(data?.data[0]?.id_kecamatan)
-        setNamaMakanan(data?.data[0]?.nama_makanan)
-        setAlamatMakanan(data?.data[0]?.alamat_makanan)
+        setNamaRumahMakan(data?.data[0]?.nama_rumah_makan)
+        setAlamat(data?.data[0]?.alamat)
         setContent(data?.data[0]?.content)
         setImage1(data?.data[0]?.image1)
         setImage2(data?.data[0]?.image2)
@@ -124,20 +124,19 @@ export default function EditKudapanPage() {
     // e.preventDefault();
     try {
         const headers = {'Authorization': `Bearer ${localStorage.getItem('token')}`}
-        await axios.put(`${API_URL}kudapan/updateKudapanById?id=${wId}`,
+        await axios.put(`${API_URL}rumahMakan/edit?id=${wId}`,
         {
-          nama_makanan: nama_makanans,
+          nama_rumah_makan: nama_rumah_makans,
           content: contents,
-          alamat: alamat_makanans,
+          alamat: alamats,
           id_kecamatan: id_kecamatans
         }, {headers})
         .then(() => {
-          setErrCreate(`Success data kudapan ${nama_makanans} di edit`)
-          navigate(`/admin/editKudapan/${wId}`)
+          setErrCreate(`Success data rumah makan ${nama_rumah_makans} berhasil di edit`)
+          navigate(`/admin/editRumahMakan/${wId}`)
 
         })
         .catch((e) => {
-          console.log(e?.response?.data?.messages)
           setErrCreate(e?.response?.data?.messages)
         })
         
@@ -145,7 +144,7 @@ export default function EditKudapanPage() {
     } catch (err) {
       window.alert(`Error`)
       console.log(err);
-      navigate('/admin/kudapan')
+      navigate('/admin/rumahMakan')
     }
   };
 
@@ -187,11 +186,10 @@ export default function EditKudapanPage() {
     // e.preventDefault();
     try {
         const headers = {'Content-Type': 'multipart/form-data', 'Authorization': `Bearer ${localStorage.getItem('token')}`}
-        await axios.put(`${API_URL}kudapan/updateImage1ById?id=${wId}`,
+        await axios.put(`${API_URL}rumahMakan/updateImage1ById?id=${wId}`,
         formData, {headers, 
           onUploadProgress:(progressEvent) => {
             const percentCompleted = Math.round((progressEvent.loaded / progressEvent.total)*100);
-            console.log(`percentage upload ${percentCompleted}%`) 
             setUploadProgress(percentCompleted)
             if (percentCompleted === 100) {
               console.log("Upload Complete!")
@@ -200,9 +198,9 @@ export default function EditKudapanPage() {
         })
         .then(() => {
           setErrCreateImage1(`Success data image 1 berhasil diubah`)
-          // window.alert(`Success data kudapan ditambahkan`)
+          // window.alert(`Success data rumahMakan ditambahkan`)
           formData.delete("files")
-          navigate(`/admin/editKudapan/${wId}`)
+          navigate(`/admin/editRumahMakan/${wId}`)
 
         })
         .catch((e) => {
@@ -214,7 +212,7 @@ export default function EditKudapanPage() {
     } catch (err) {
       window.alert(`Error`)
       console.log(err);
-      navigate(`/admin/editKudapan/${wId}`)
+      navigate(`/admin/editRumahMakan/${wId}`)
     }
   };
 
@@ -222,11 +220,10 @@ export default function EditKudapanPage() {
     // e.preventDefault();
     try {
         const headers = {'Content-Type': 'multipart/form-data', 'Authorization': `Bearer ${localStorage.getItem('token')}`}
-        await axios.put(`${API_URL}kudapan/updateImage2ById?id=${wId}`,
+        await axios.put(`${API_URL}rumahMakan/updateImage2ById?id=${wId}`,
         formData2, {headers, 
           onUploadProgress:(progressEvent) => {
             const percentCompleted = Math.round((progressEvent.loaded / progressEvent.total)*100);
-            console.log(`percentage upload ${percentCompleted}%`) 
             setUploadProgress2(percentCompleted)
             if (percentCompleted === 100) {
               console.log("Upload Complete!")
@@ -235,9 +232,9 @@ export default function EditKudapanPage() {
         })
         .then(() => {
           setErrCreateImage2(`Success data image 2 berhasil diubah`)
-          // window.alert(`Success data kudapan ditambahkan`)
+          // window.alert(`Success data rumahMakan ditambahkan`)
           formData2.delete("files")
-          navigate(`/admin/editKudapan/${wId}`)
+          navigate(`/admin/editRumahMakan/${wId}`)
 
         })
         .catch((e) => {
@@ -249,12 +246,13 @@ export default function EditKudapanPage() {
     } catch (err) {
       window.alert(`Error`)
       console.log(err);
-      navigate(`/admin/editKudapan/${wId}`)
+      navigate(`/admin/editRumahMakan/${wId}`)
     }
   };
 
   useEffect(() => {
-    getDetailKudapan()
+    localStorage.setItem("editRumahMakan", window.location.pathname)
+    getDetailRumahMakan()
     getKecamatan()
     if(localStorage.getItem("token") == null) { 
       navigate("/login")
@@ -301,36 +299,40 @@ export default function EditKudapanPage() {
   return (
     <>
       <Helmet>
-        <title> Gastronita | Detail Kudapan </title>
+        <title> Gastronita | Detail Rumah Makan </title>
       </Helmet>
       <Container maxWidth="md"> 
         <Grid container spacing={3}>
         {
         localStorage.getItem('editKecamatan') !== null &&
-        localStorage.getItem('kudapan') !== null ?
+        localStorage.getItem('rumahMakan') !== null ?
           
         <Grid item xs={12} sm={12} md={12}>
           <p><a href='/admin'>Kecamatan</a> &#129058;
           &nbsp;<a href={`${localStorage.getItem('editKecamatan')}`} >Edit Kecamatan</a> &#129058;
-          &nbsp;<a href={`${localStorage.getItem('kudapan')}`} >Kudapan</a> &#129058;
-          &nbsp;<a style={{color:"black"}}>Edit Kudapan</a> 
+          &nbsp;<a href={`${localStorage.getItem('rumahMakan')}`} >Rumah Makan</a> &#129058;
+          &nbsp;<a style={{color:"black"}}>Edit Rumah Makan</a> 
           </p>
         </Grid>
         :
         <></>
         }
+
+        <Grid item xs={12} sm={12} md={6}>
+          <Button href={`/admin/menuMakanan/${nama_rumah_makans}/${wId}`} variant='outlined'>Kelola Menu Makanan di {nama_rumah_makans}</Button>
+        </Grid>
           <Grid item xs={12} sm={12} md={12}>
             <h5>{errCreate}</h5>
-            <h1>Edit Kudapan</h1>
+            <h1>Edit RumahMakan</h1>
             <form id='myform'>
             <Stack spacing={2} m={2}>
               
               <div className="form-group">
-              <TextField id="nama_makanan" label="Nama Kudapan" value={nama_makanans !== undefined && nama_makanans !== null ? nama_makanans : ''} variant="outlined" focused onChange={(e) => setNamaMakanan(e.target.value)} fullWidth required/>
+              <TextField id="nama_rumah_makan" label="Nama RumahMakan" value={nama_rumah_makans !== undefined && nama_rumah_makans !== null ? nama_rumah_makans : ''} variant="outlined" focused onChange={(e) => setNamaRumahMakan(e.target.value)} fullWidth required/>
               </div>
 
               <div className="form-group">
-              <TextField id="alamat_makanan" label="Alamat Kudapan" value={alamat_makanans !== undefined && alamat_makanans !== null ? alamat_makanans : ''} variant="outlined" focused onChange={(e) => setAlamatMakanan(e.target.value)} fullWidth required/>
+              <TextField id="alamat" label="Alamat RumahMakan" value={alamats !== undefined && alamats !== null ? alamats : ''} variant="outlined" focused onChange={(e) => setAlamat(e.target.value)} fullWidth required/>
               </div>
 
               <div className="form-group">

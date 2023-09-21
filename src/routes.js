@@ -5,10 +5,8 @@ import SimpleLayout from './layouts/simple';
 import AdminDashboardLayout from './layouts/admin';
 //
 import BlogPage from './pages/BlogPage';
-import UserPage from './pages/UserPage';
 // import LoginPage from './pages/LoginPage';
 import Page404 from './pages/Page404';
-import ProductsPage from './pages/ProductsPage';
 import DashboardAppPage from './pages/DashboardAppPage';
 import DetailKecamatan from './pages/DetailKecamatan';
 import KudapanPage from './pages/KudapanPage';
@@ -25,6 +23,14 @@ import AddSliderPage from './layouts/admin/pages/addSliderPage';
 import AdminKudapan from './layouts/admin/pages/AdminkudapanPage';
 import EditKudapanPage from './layouts/admin/pages/EditKudapanPage';
 import AddKudapanPage from './layouts/admin/pages/addKudapanPage';
+import AdminRumahMakanPage from './layouts/admin/pages/AdminRumahMakanPage';
+import AddRumahMakanPage from './layouts/admin/pages/addRumahMakanPage';
+import EditRumahMakanPage from './layouts/admin/pages/EditRumahMakanPage';
+import AdminMenuMakananPage from './layouts/admin/pages/AdminMenuMakananPage';
+import AddMenuMakananPage from './layouts/admin/pages/addMenuMakananPage';
+import EditMenuMakananPage from './layouts/admin/pages/EditMenuMakananPage';
+import DestinasiPage from './pages/DestinasiPage';
+import SearchPage from './pages/SearchPage';
 
 // ----------------------------------------------------------------------
 
@@ -36,9 +42,9 @@ export default function Router() {
       children: [
         { element: <Navigate to="/beranda" />, index: true },
         { path: 'beranda', element: <DashboardAppPage /> },
-        { path: 'pencarian', element: <UserPage /> },
-        { path: 'destinasi', element: <ProductsPage /> },
-        { path: 'detail-kecamatan', element: <DetailKecamatan /> },
+        { path: 'pencarian', element: <SearchPage /> },
+        { path: 'destinasi', element: <DestinasiPage /> },
+        { path: 'detail-kecamatan/:slug', element: <DetailKecamatan /> },
         { path: 'kudapan/:slug', element: <KudapanPage /> },
         { path: 'rumah-makan/:slug', element: <RumahMakanPage /> },
         { path: 'rumah-makan/:slug/:slug', element: <DetailRumahMakanPage /> },
@@ -58,8 +64,14 @@ export default function Router() {
         { path: 'slider', element: <SliderPage />},
         { path: 'addSliderPage', element: <AddSliderPage />},
         { path: 'kudapan/:slug/:slug', element: <AdminKudapan /> },
+        { path: 'rumahMakan/:slug/:slug', element: <AdminRumahMakanPage /> },
+        { path: 'menuMakanan/:slug/:slug', element: <AdminMenuMakananPage /> },
         { path: 'editKudapan/:slug', element: <EditKudapanPage /> },
-        { path: 'addKudapanPage/:slug/:slug', element:< AddKudapanPage/> }
+        { path: 'editRumahMakan/:slug', element: <EditRumahMakanPage /> },
+        { path: 'editMenuMakanan/:slug', element: <EditMenuMakananPage /> },
+        { path: 'addKudapanPage/:slug/:slug', element:< AddKudapanPage/> },
+        { path: 'addRumahMakanPage/:slug/:slug', element:< AddRumahMakanPage/> },
+        { path: 'addMenuMakananPage/:slug/:slug', element:< AddMenuMakananPage/> },
       ],
     },
     {

@@ -73,7 +73,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function AdminKudapanPage() {
+export default function AdminMenuMakananPage() {
   const [open, setOpen] = useState(null);
 
   const [page, setPage] = useState(0);
@@ -82,7 +82,7 @@ export default function AdminKudapanPage() {
 
   const [selected, setSelected] = useState([]);
 
-  const [orderBy, setOrderBy] = useState('kudapan');
+  const [orderBy, setOrderBy] = useState('menuMakanan');
 
   const [filterName, setFilterName] = useState('');
 
@@ -90,28 +90,29 @@ export default function AdminKudapanPage() {
 
   const navigate = useNavigate();
 
-  const [kudapan, setKudapan] = useState([])
+  const [menuMakanan, setMenuMakanan] = useState([])
 
   useEffect(() => {
-    localStorage.setItem("kudapan", window.location.pathname)
+    localStorage.setItem("menuMakanan", window.location.pathname)
     if(localStorage.getItem("token") == null) { 
       navigate("/login")
       window.location.reload()
     }
-    getKudapan()
+    getMenuMakanan()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   
   const API_URL = process.env.REACT_APP_API
   const [clickedId, setClickedId] = useState()
   const headers = {'Authorization': `Bearer ${localStorage.getItem('token')}`}
-  const wKecamatan = window.location.pathname.split('/')[3].includes('%20') ? window.location.pathname.split('/')[3].replaceAll('%20', ' ') : window.location.pathname.split('/')[3]
   const wId = window.location.pathname.split('/')[4]
-  const getKudapan = async () => {
+  const wRumahMakan = window.location.pathname.split('/')[3].includes('%20') ? window.location.pathname.split('/')[3].replaceAll('%20', ' ') : window.location.pathname.split('/')[3]
+  
+  const getMenuMakanan = async () => {
     try {
-      await axios.get(`${API_URL}join/allKudapanByKecamatan?kecamatan=${wKecamatan}`, {headers})
+      await axios.get(`${API_URL}join/allMenuByIdRumahMakan?id_rumah_makan=${wId}`, {headers})
       .then(({data}) => {
-        setKudapan(data?.data)
+        setMenuMakanan(data?.data)
       })
       .catch((err) =>
       {
@@ -121,7 +122,7 @@ export default function AdminKudapanPage() {
           console.log("auth failed")
         }
         if(err.response.status === 404){
-          setKudapan([])
+          setMenuMakanan([])
         }
     })
     } catch (error) {
@@ -134,7 +135,7 @@ export default function AdminKudapanPage() {
       handleCloseMenu();
       axios.delete(`${API_URL}kudapan/deleteMakananById?id=${clickedId}`, {headers})
       .then(() => {
-        getKudapan();
+        getMenuMakanan();
       })
       .catch((err) => {
         console.log(err)
@@ -161,18 +162,18 @@ export default function AdminKudapanPage() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = kudapan.map((n) => n.kudapan);
+      const newSelecteds = menuMakanan.map((n) => n.menuMakanan);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  // const handleClick = (event, kudapan) => {
-  //   const selectedIndex = selected.indexOf(kudapan);
+  // const handleClick = (event, menuMakanan) => {
+  //   const selectedIndex = selected.indexOf(menuMakanan);
   //   let newSelected = [];
   //   if (selectedIndex === -1) {
-  //     newSelected = newSelected.concat(selected, kudapan);
+  //     newSelected = newSelected.concat(selected, menuMakanan);
   //   } else if (selectedIndex === 0) {
   //     newSelected = newSelected.concat(selected.slice(1));
   //   } else if (selectedIndex === selected.length - 1) {
@@ -197,37 +198,49 @@ export default function AdminKudapanPage() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - kudapan.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - menuMakanan.length) : 0;
 
-  const filteredUsers = applySortFilter(kudapan, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(menuMakanan, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
   return (
     <>
       <Helmet>
-        <title> Kudapan | Minimal UI </title>
+        <title> MenuMakanan | Minimal UI </title>
       </Helmet>
 
       <Container maxWidth="md">
-        {
-          localStorage.getItem('editKecamatan') !== null ?
-          <Grid item xs={12} sm={12} md={12}>
+      {
+        localStorage.getItem('editKecamatan') !== null &&
+        localStorage.getItem('rumahMakan') !== null &&
+        localStorage.getItem('editRumahMakan') !== null ?
+          
+        <Grid item xs={12} sm={12} md={12}>
           <p><a href='/admin'>Kecamatan</a> &#129058;
           &nbsp;<a href={`${localStorage.getItem('editKecamatan')}`} >Edit Kecamatan</a> &#129058;
-          &nbsp;<a style={{color:"black"}}>Kudapan</a> 
+          &nbsp;<a href={`${localStorage.getItem('rumahMakan')}`} >Rumah Makan</a> &#129058;
+          &nbsp;<a href={`${localStorage.getItem('editRumahMakan')}`} >Edit Rumah Makan</a> &#129058;
+          &nbsp;<a style={{color:"black"}}>Menu Makanan</a> 
           </p>
-          </Grid>
-          :
-          <></>
+        </Grid>
+        :
+        <></>
         }
        
+        {/* <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}> */}
+        <Grid item xs={12} sm={12} md={12}>
           <Typography variant="h4" gutterBottom>
-            Kudapan di Kecamatan {`${wKecamatan}`}
+            Menu Makanan di {wRumahMakan}
           </Typography>
-          <Button style={{marginBottom:"15px"}} href={`/admin/addKudapanPage/${wKecamatan}/${wId}`} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
-            Kudapan
+          </Grid>
+
+          <Grid item xs={12} sm={12} md={12}>
+          <Button style={{marginBottom:"15px"}} href={`/admin/addMenuMakananPage/${wRumahMakan}/${wId}`} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
+            Menu Makanan
           </Button>
+          </Grid>
+        {/* </Stack> */}
 
         <Card>
           <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
@@ -239,30 +252,30 @@ export default function AdminKudapanPage() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={kudapan.length}
+                  rowCount={menuMakanan.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, nama_makanan} = row;
-                    const selectedUser = selected.indexOf(kudapan) !== -1;
+                    const { id_makanan, nama_makanan} = row;
+                    const selectedUser = selected.indexOf(menuMakanan) !== -1;
 
                     return (
-                      <TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedUser}>
+                      <TableRow hover key={id_makanan} tabIndex={-1} role="checkbox" selected={selectedUser}>
                         {/* <TableCell padding="checkbox">
-                          <Checkbox checked={selectedUser} onChange={(event) => handleClick(event, kudapan)} />
+                          <Checkbox checked={selectedUser} onChange={(event) => handleClick(event, menuMakanan)} />
                         </TableCell> */}
 
                         <TableCell component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="center" spacing={2}>
-                            <a style={{marginLeft: "15px"}} href={`/admin/editKudapan/${id}`}>{nama_makanan}</a>
+                            <a style={{marginLeft: "15px"}} href={`/admin/editMenuMakanan/${id_makanan}`}>{nama_makanan}</a>
                           </Stack>
                         </TableCell>
 
                         <TableCell align="right">
-                          <IconButton size="large" color="inherit" onClick={(event) => {handleOpenMenu(event, id)}}>
+                          <IconButton size="large" color="inherit" onClick={(event) => {handleOpenMenu(event, id_makanan)}}>
                             <Iconify icon={'eva:more-vertical-fill'}/>
                           </IconButton>
                         </TableCell>
@@ -306,7 +319,7 @@ export default function AdminKudapanPage() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={kudapan.length}
+            count={menuMakanan.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

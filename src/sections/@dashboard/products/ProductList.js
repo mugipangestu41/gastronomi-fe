@@ -6,15 +6,16 @@ import ShopProductCard from './ProductCard';
 // ----------------------------------------------------------------------
 
 ProductList.propTypes = {
-  products: PropTypes.array.isRequired,
+  kecamatan: PropTypes.array
 };
 
-export default function ProductList({ products, ...other }) {
+export default function ProductList({ kecamatan, ...other }) {
   return (
     <Grid container spacing={3} {...other}>
-      {products.map((product) => (
-        <Grid key={product.id} item xs={12} sm={6} md={3}>
-          <ShopProductCard product={product} />
+      {kecamatan.map((kec) => (
+        <Grid key={kec.id} item xs={12} sm={6} md={3}>
+          <ShopProductCard kecamatans={kec} />
+          
         </Grid>
       ))}
     </Grid>

@@ -1,8 +1,10 @@
 import { Helmet } from 'react-helmet-async';
+import axios from 'axios';
 // import { faker } from '@faker-js/faker';
 // @mui
 // import { useTheme } from '@mui/material/styles';
 import { Grid, Container, Typography, Card, Divider, Paper, Button } from '@mui/material';
+import { useEffect, useState } from 'react';
 // components
 // import Iconify from '../components/iconify';
 // // sections
@@ -21,8 +23,30 @@ import { Grid, Container, Typography, Card, Divider, Paper, Button } from '@mui/
 // ----------------------------------------------------------------------
 
 export default function DetailKecamatan() {
-  // const theme = useTheme();
+  const API_URL = process.env.REACT_APP_API
+  const BACKEND_API = process.env.REACT_APP_BE
+  const wKecamatan = window.location.pathname.split('/')[2].includes('%20') ? window.location.pathname.split('/')[2].replaceAll('%20', ' ') : window.location.pathname.split('/')[2]
+  const [kecamatan, setKecamatan] = useState([])
 
+  const getDetailKecamatan = async () => {
+    try {
+      await axios.get(`${API_URL}kecamatan/kecamatanByName?kecamatan_name=${wKecamatan}`)
+      .then(({data}) => {
+        // setDetailKecamatan(data?.data[0])
+       setKecamatan(data?.data[0])
+      })
+      .catch((err) =>
+      {if(err.response.status === 404){
+        setKecamatan([])
+      }})
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  useEffect(() => {
+    getDetailKecamatan();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   return (
     <>
       <Helmet>
@@ -37,13 +61,19 @@ export default function DetailKecamatan() {
 
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={8} lg={8}>
-          <Paper style={{backgroundImage: 'url("http://localhost:3000/assets/lembang.jpg")', 
-          backgroundSize: "cover", backgroundRepeat: "no-repeat", height: "100vh",maxHeight:"300px"}}/>
+          <Paper style={kecamatan?.image1 !== undefined ? 
+          {backgroundImage: `url(${BACKEND_API}${kecamatan?.image1})`, 
+          backgroundSize: "cover", backgroundRepeat: "no-repeat", height: "100vh",maxHeight:"300px"}
+          : {}
+          }/>
           </Grid>
 
           <Grid item xs={12} sm={6} md={12} lg={4}>
-          <Paper style={{backgroundImage: 'url("http://localhost:3000/assets/map-lembang.jpg")', 
-          backgroundSize: "cover", backgroundRepeat: "no-repeat", height: "100vh",maxHeight:"300px"}}/>
+          <Paper style={kecamatan?.image2 !== undefined ? 
+          {backgroundImage: `url(${BACKEND_API}${kecamatan?.image2})`, 
+          backgroundSize: "cover", backgroundRepeat: "no-repeat", height: "100vh",maxHeight:"300px"}
+          : {}
+          }/>
             
           </Grid>
 
@@ -55,8 +85,8 @@ export default function DetailKecamatan() {
               {/* <Typography variant='h5'>Infografis</Typography> */}
               <center style={{marginTop:"10px"}}>
                 
-                <Button href="kudapan/lembang" variant='contained' color='inherit'>Kudapan</Button>
-                <Button href="rumah-makan/lembang" style={{marginLeft:"20px"}} variant='contained' color='inherit'>Rumah Makan</Button>
+                <Button href={`/kudapan/${kecamatan?.kecamatan}`} variant='contained' color='inherit'>Kudapan</Button>
+                <Button href={`/rumah-makan/${kecamatan?.kecamatan}`}  style={{marginLeft:"20px"}} variant='contained' color='inherit'>Rumah Makan</Button>
               {/* <img width={"150px"} src="http://localhost:3000/assets/gastro.jpeg" alt='infografis'/> */}
               </center>
               </div>
@@ -67,11 +97,10 @@ export default function DetailKecamatan() {
           <Grid item xs={12} md={12} lg={12}>
             <Card>
               <div style={{marginLeft:"10px", marginTop:"10px", marginBottom:"10px", marginRight:"10px"}}>
-            <Typography variant='h5'>Lembang</Typography>
-            {/* <Typography variant='subtitle1'>Menjelajah Gastronomi Bandung Barat bersama Renita</Typography> */}
+            <Typography variant='h5'>{kecamatan?.kecamatan}</Typography>
             <Divider variant="fullWidth" style={{ margin: "10px 0"}}/>
-            <Typography variant='subtitle2' style={{textAlign:"justify"}}>
-            Lémbang (Sunda: ᮜᮦᮙ᮪ᮘᮀ) adalah sebuah kecamatan di Kabupaten Bandung Barat, Jawa Barat, Indonesia. Kecamatan ini berjarak sekitar 22 Kilometer dari ibu kota kabupaten Bandung Barat ke arah timur laut melalui Cisarua. Pusat pemerintahannya berada di Desa Lembang. Kecamatan Lembang merupakan kecamatan paling timur dan terkenal sebagai tujuan wisata di Jawa Barat.</Typography>
+            {/* eslint-disable-next-line  */}
+            <div style={{textAlign:"justify"}} dangerouslySetInnerHTML={{__html: kecamatan?.content}} />
             </div>
             </Card>
           </Grid>

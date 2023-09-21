@@ -103,9 +103,8 @@ export default function EditKecamatanPage() {
           kecamatan: kecamatans,
           content: contents
         }, {headers})
-        .then(({data}) => {
-          console.log(data)
-          setErrCreate(`Success data kecamatan ${kecamatans} diedit`)
+        .then(() => {
+          setErrCreate(`Success data kecamatan ${kecamatans} di edit`)
           navigate(`/admin/editKecamatan/${kecamatans}/${wId}`)
 
         })
@@ -171,8 +170,7 @@ export default function EditKecamatanPage() {
             }
           }
         })
-        .then(({data}) => {
-          console.log(data)
+        .then(() => {
           setErrCreateImage1(`Success data image 1 ${kecamatans} berhasil diubah`)
           // window.alert(`Success data kecamatan ${kecamatans} ditambahkan`)
           formData.delete("files")
@@ -207,8 +205,7 @@ export default function EditKecamatanPage() {
             }
           }
         })
-        .then(({data}) => {
-          console.log(data)
+        .then(() => {
           setErrCreateImage2(`Success data image 2 ${kecamatans} berhasil diubah`)
           // window.alert(`Success data kecamatan ${kecamatans} ditambahkan`)
           formData2.delete("files")
@@ -288,7 +285,7 @@ export default function EditKecamatanPage() {
         </Grid>
 
         <Grid item xs={12} sm={12} md={6}>
-          <Button variant='outlined'>Kelola Rumah Makan di Kecamatan {wKecmatan}</Button>
+          <Button href={`/admin/rumahMakan/${wKecmatan}/${wId}`} variant='outlined'>Kelola Rumah Makan di Kecamatan {wKecmatan}</Button>
         </Grid>
           <Grid item xs={12} sm={12} md={12}>
             <h5>{errCreate}</h5>

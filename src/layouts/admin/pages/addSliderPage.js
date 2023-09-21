@@ -42,8 +42,7 @@ export default function AddSliderPage() {
             }
           }
         })
-        .then(({data}) => {
-          console.log(data)
+        .then(() => {
           setErrCreate(`Success data slider ditambahkan`)
           // window.alert(`Success data slider ${sliders} ditambahkan`)
           formData.delete("files")

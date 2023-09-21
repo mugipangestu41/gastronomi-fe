@@ -30,21 +30,25 @@ import 'react-quill/dist/quill.snow.css';
 
 // ----------------------------------------------------------------------
 
-export default function EditBerandaPage() {
+export default function EditMenuMakananPage() {
   // const theme = useTheme();
   // const navigate = useNavigate();
   const navigate = useNavigate();
   const formData = new FormData();
+  const formData2 = new FormData();
 
   const [uploadProgress, setUploadProgress] = useState(null)
+  const [uploadProgress2, setUploadProgress2] = useState(null)
   const [errCreate, setErrCreate] = useState('')
   const [errCreateImage1, setErrCreateImage1] = useState('')
-  // const [detailBeranda, setDetailBeranda] = useState([])
+  const [errCreateImage2, setErrCreateImage2] = useState('')
+  // const [detailMenuMakanan, setDetailMenuMakanan] = useState([])
   const [image1, setImage1] = useState('')
   const [tempImage1, setTempImage1] = useState()
-  const [juduls, setJudul] = useState('')
-  const [subJuduls, setSubJudul] = useState('')
+  const [tempImage2, setTempImage2] = useState()
+  const [image2, setImage2] = useState('')
   const [contents, setContent] = useState('')
+  const wId = window.location.pathname.split('/')[3].includes('%20') ? window.location.pathname.split('/')[3].replaceAll('%20', ' ') : window.location.pathname.split('/')[3]
   // const testVal = "http://localhost:3001/photos/0.png_1693883284382.png"
   const onFileChange = async (event) => { 
     setTempImage1()
@@ -54,19 +58,34 @@ export default function EditBerandaPage() {
    
   };
 
+  const onFileChange2 = async (event) => { 
+    setTempImage2()
+    formData.append("files", event.target.files[0])
+    // console.log(URL.createObjectURL(formData.get("files")))
+    setTempImage2(event.target.files[0])
+   
+  };
+
   const API_URL = process.env.REACT_APP_API
   const BACKEND_API = process.env.REACT_APP_BE
   const headers = {'Authorization': `Bearer ${localStorage.getItem('token')}`}
+  const [nama_makanans, setNamaMakanan] = useState('')
+  const [alamat_makanans, setAlamatMakanan] = useState('')
+  const [rumahMakans, setRumahMakan] = useState('')
+  const [id_rumah_makans, setIdRumahMakan] = useState('')
 
-  const getDetailBeranda = async () => {
+  const getDetailMenuMakanan = async () => {
     try {
-      await axios.get(`${API_URL}beranda/allBeranda`, {headers})
+      await axios.get(`${API_URL}join/makananById?id_makanan=${wId}`, {headers})
       .then(({data}) => {
-        // setDetailBeranda(data?.data[0])
-        setJudul(data?.data[0]?.judul)
-        setSubJudul(data?.data[0]?.sub_judul)
+        // setDetailMenuMakanan(data?.data[0])
+        setNamaMakanan(data?.data[0]?.nama_makanan)
+        setAlamatMakanan(data?.data[0]?.alamat_rumah_makan)
+        setRumahMakan(data?.data[0]?.nama_rumah_makan)
         setContent(data?.data[0]?.content)
         setImage1(data?.data[0]?.image1)
+        setImage2(data?.data[0]?.image2)
+        setIdRumahMakan(data?.data[0]?.id_rumah_makan)
       })
       .catch((err) =>
       {if(err.response.status === 401){
@@ -83,15 +102,15 @@ export default function EditBerandaPage() {
     // e.preventDefault();
     try {
         const headers = {'Authorization': `Bearer ${localStorage.getItem('token')}`}
-        await axios.put(`${API_URL}beranda/edit`,
+        await axios.put(`${API_URL}kudapan/updateMenuById?id=${wId}`,
         {
-          judul: juduls,
-          sub_judul: subJuduls,
-          content: contents
+          nama_makanan: nama_makanans,
+          content: contents,
+          id_rumah_makan: id_rumah_makans
         }, {headers})
         .then(() => {
-          setErrCreate(`Success data beranda di edit`)
-          navigate(`/admin/beranda`)
+          setErrCreate(`Success data menu makanan ${nama_makanans} berhasil di edit`)
+          navigate(`/admin/editMenuMakanan/${wId}`)
 
         })
         .catch((e) => {
@@ -103,7 +122,7 @@ export default function EditBerandaPage() {
     } catch (err) {
       window.alert(`Error`)
       console.log(err);
-      navigate('/admin/beranda')
+      navigate('/admin/menuMakanan')
     }
   };
 
@@ -124,13 +143,28 @@ export default function EditBerandaPage() {
     }
   };
 
- 
+  const handleImage2 = async () => {
+    try {
+      formData2.append("files", tempImage2)
+      if(formData2.get("files") == null){
+        formData2.delete("files")
+        setErrCreateImage2("Kolom file wajib di isi")
+      }
+      else {
+        setUploadProgress2(null)
+        handleUploadImage2()
+      }
+    } catch (err) {
+      window.alert(`Error2`)
+      console.log(err);
+    }
+  };
 
   const handleUploadImage1 = async () => {
     // e.preventDefault();
     try {
         const headers = {'Content-Type': 'multipart/form-data', 'Authorization': `Bearer ${localStorage.getItem('token')}`}
-        await axios.put(`${API_URL}beranda/updateImage1ById`,
+        await axios.put(`${API_URL}kudapan/updateImage1ById?id=${wId}`,
         formData, {headers, 
           onUploadProgress:(progressEvent) => {
             const percentCompleted = Math.round((progressEvent.loaded / progressEvent.total)*100);
@@ -142,10 +176,10 @@ export default function EditBerandaPage() {
           }
         })
         .then(() => {
-          setErrCreateImage1(`Success data image berhasil diubah`)
-          // window.alert(`Success data beranda ${berandas} ditambahkan`)
+          setErrCreateImage1(`Success data image 1 berhasil diubah`)
+          // window.alert(`Success data menuMakanan ditambahkan`)
           formData.delete("files")
-          navigate(`/admin/beranda`)
+          navigate(`/admin/editMenuMakanan/${wId}`)
 
         })
         .catch((e) => {
@@ -157,12 +191,47 @@ export default function EditBerandaPage() {
     } catch (err) {
       window.alert(`Error`)
       console.log(err);
-      navigate(`/admin/beranda`)
+      navigate(`/admin/editMenuMakanan/${wId}`)
+    }
+  };
+
+  const handleUploadImage2 = async () => {
+    // e.preventDefault();
+    try {
+        const headers = {'Content-Type': 'multipart/form-data', 'Authorization': `Bearer ${localStorage.getItem('token')}`}
+        await axios.put(`${API_URL}kudapan/updateImage2ById?id=${wId}`,
+        formData2, {headers, 
+          onUploadProgress:(progressEvent) => {
+            const percentCompleted = Math.round((progressEvent.loaded / progressEvent.total)*100);
+            console.log(`percentage upload ${percentCompleted}%`) 
+            setUploadProgress2(percentCompleted)
+            if (percentCompleted === 100) {
+              console.log("Upload Complete!")
+            }
+          }
+        })
+        .then(() => {
+          setErrCreateImage2(`Success data image 2 berhasil diubah`)
+          // window.alert(`Success data menuMakanan ditambahkan`)
+          formData2.delete("files")
+          navigate(`/admin/editMenuMakanan/${wId}`)
+
+        })
+        .catch((e) => {
+          setErrCreateImage2(e?.response?.data?.messages)
+          formData2.delete("files")
+        })
+        
+        
+    } catch (err) {
+      window.alert(`Error`)
+      console.log(err);
+      navigate(`/admin/editMenuMakanan/${wId}`)
     }
   };
 
   useEffect(() => {
-    getDetailBeranda()
+    getDetailMenuMakanan()
     if(localStorage.getItem("token") == null) { 
       navigate("/login")
       window.location.reload()
@@ -208,23 +277,46 @@ export default function EditBerandaPage() {
   return (
     <>
       <Helmet>
-        <title> Gastronita | Detail Beranda </title>
+        <title> Gastronita | Detail MenuMakanan </title>
       </Helmet>
       <Container maxWidth="md"> 
         <Grid container spacing={3}>
+        {
+        localStorage.getItem('editKecamatan') !== null &&
+        localStorage.getItem('rumahMakan') !== null &&
+        localStorage.getItem('editRumahMakan') !== null ?
+          
+        <Grid item xs={12} sm={12} md={12}>
+          <p><a href='/admin'>Kecamatan</a> &#129058;
+          &nbsp;<a href={`${localStorage.getItem('editKecamatan')}`} >Edit Kecamatan</a> &#129058;
+          &nbsp;<a href={`${localStorage.getItem('rumahMakan')}`} >Rumah Makan</a> &#129058;
+          &nbsp;<a href={`${localStorage.getItem('editRumahMakan')}`} >Edit Rumah Makan</a> &#129058;
+          &nbsp;<a href={`${localStorage.getItem('menuMakanan')}`} >Menu Makanan</a> &#129058;
+          &nbsp;<a style={{color:"black"}}>Edit Menu Makanan</a> 
+          </p>
+        </Grid>
+        :
+        <></>
+        }
           <Grid item xs={12} sm={12} md={12}>
             <h5>{errCreate}</h5>
-            <h1>Edit Beranda</h1>
+            <h1>Edit Menu Makanan</h1>
             <form id='myform'>
             <Stack spacing={2} m={2}>
               
               <div className="form-group">
-              <TextField id="judul" label="Judul" value={juduls !== undefined && juduls !== null ? juduls : ''} variant="outlined" focused onChange={(e) => setJudul(e.target.value)} fullWidth required/>
+              <TextField id="nama_makanan" label="Nama Menu Makanan" value={nama_makanans !== undefined && nama_makanans !== null ? nama_makanans : ''} variant="outlined" focused onChange={(e) => setNamaMakanan(e.target.value)} fullWidth required/>
               </div>
 
               <div className="form-group">
-              <TextField id="sub_judul" label="Sub Judul" value={subJuduls !== undefined && subJuduls !== null ? subJuduls : ''} variant="outlined" focused onChange={(e) => setSubJudul(e.target.value)} fullWidth required/>
+              <TextField disabled id="rumah_makan" label="Rumah Makan" value={rumahMakans !== undefined && rumahMakans !== null ? rumahMakans : ''} variant="outlined" focused fullWidth/>
               </div>
+
+              <div className="form-group">
+              <TextField disabled id="alamat_makanan" label="Alamat Rumah Makan" value={alamat_makanans !== undefined && alamat_makanans !== null ? alamat_makanans : ''} variant="outlined" focused fullWidth/>
+              </div>
+
+              
 
               <div className='form-group'>
                 <FormLabel style={{color:"black"}}>Content</FormLabel>
@@ -241,7 +333,7 @@ export default function EditBerandaPage() {
               <Divider style={{marginBottom:"20px"}}/>
 
               <div className='form-group'>
-              <FormLabel style={{color:"black", fontWeight:"bold"}}>Image</FormLabel>
+              <FormLabel style={{color:"black", fontWeight:"bold"}}>Image 1 </FormLabel>
               {
                 tempImage1 !== undefined ?
                 <img src={URL.createObjectURL(tempImage1)} alt="asd" height={200} />
@@ -260,13 +352,37 @@ export default function EditBerandaPage() {
                   <></>
                 }
               <h5>{errCreateImage1}</h5>
-                  <FormLabel style={{color:"black"}}>Image </FormLabel>
+                  <FormLabel style={{color:"black"}}>Image 1 </FormLabel>
                   <Input accept="image/*" type="file" name="image1" onChange={onFileChange} required/>
                   <Button onClick={handleImage1} variant='contained' fullWidth>Upload</Button>
               </div>
               <Divider style={{marginBottom:"20px"}}/>
       
+      
+              <div className='form-group'>
+              <FormLabel style={{color:"black"}}>Image 2 </FormLabel>
+                {/* <img src={`${BACKEND_API}${image2}`} alt="asd" height={200} /> */}
+                {
+                tempImage2 !== undefined ?
+                <img src={URL.createObjectURL(tempImage2)} alt="asd" height={200} />
 
+                :
+                <img src={`${BACKEND_API}${image2}`} alt="asd" height={200} />
+              }
+              </div>
+              <div className="form-group">
+              {
+                  uploadProgress2 !== null ? 
+                  <h5 style={{marginBottom: "-20px"}}>Upload Percentage {uploadProgress2}%</h5>
+                  :
+                  <></>
+                }
+              <h5>{errCreateImage2}</h5>
+              <FormLabel style={{color:"black", fontWeight:"bold"}}>Image 2 </FormLabel>
+                  <Input type="file" name="image2" onChange={onFileChange2} required/>
+                  <Button onClick={handleImage2} variant='contained' fullWidth>Upload</Button>
+              </div>
+             
               
               </Stack>
              

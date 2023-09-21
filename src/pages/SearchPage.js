@@ -2,6 +2,7 @@ import { Helmet } from 'react-helmet-async';
 import { filter } from 'lodash';
 // import { sentenceCase } from 'change-case';
 import { useState } from 'react';
+import axios from 'axios'
 
 // @mui
 import {
@@ -20,9 +21,10 @@ import {
   Container,
   Typography,
   // IconButton,
-  TableContainer,
+  // TableContainer,
   TablePagination,
   Grid,
+  TextField,
 } from '@mui/material';
 // components
 // import Label from '../components/label';
@@ -40,11 +42,11 @@ import {
 } from '../sections/@dashboard/app';
 import Scrollbar from '../components/scrollbar';
 // sections
-import { UserListToolbar } from '../sections/@dashboard/user';
+// import { UserListToolbar } from '../sections/@dashboard/user';
 // mock
-import USERLIST from '../_mock/user';
+// import USERLIST from '../_mock/user';
 
-
+/* eslint-disable camelcase */
 // ----------------------------------------------------------------------
 
 // ----------------------------------------------------------------------
@@ -78,7 +80,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function UserPage() {
+export default function SearchPage() {
   const [open, setOpen] = useState(null);
 
   const [page, setPage] = useState(0);
@@ -87,7 +89,7 @@ export default function UserPage() {
 
   const orderBy = "name"
 
-  const [filterName, setFilterName] = useState('');
+  const filterName = ''
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -103,19 +105,40 @@ export default function UserPage() {
     setPage(newPage);
   };
 
+  const API_URL = process.env.REACT_APP_API
+  
+  const [search, setSearch] = useState([])
+  const handleSearch = async (e) => {
+    try {
+      await axios.get(`${API_URL}join/allMakanan?nama_makanan=${e}`)
+      .then(({data}) => {
+        setSearch(data?.data)
+      })
+      .catch((err) =>
+      {
+        if(err.response.status === 404){
+          setSearch([])
+          console.log("err")
+        }
+    })
+    } catch (error) {
+      console.log(error)
+    }
+  };
+
   const handleChangeRowsPerPage = (event) => {
     setPage(0);
     setRowsPerPage(parseInt(event.target.value, 10));
   };
 
-  const handleFilterByName = (event) => {
-    setPage(0);
-    setFilterName(event.target.value);
-  };
+  // const handleFilterByName = (event) => {
+  //   setPage(0);
+  //   setFilterName(event.target.value);
+  // };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - search.length) : 0;
 
-  const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(search, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
@@ -130,28 +153,23 @@ export default function UserPage() {
           Pencarian
         </Typography>
         {/* <Card> */}
-          <UserListToolbar filterName={filterName} onFilterName={handleFilterByName} />
-          {
-            filterName !== '' ?
-
-            
+          {/* <UserListToolbar filterName={filterName} onFilterName={handleFilterByName} /> */}
+          <TextField style={{marginBottom: "20px"}} label="Cari makanan..." onChange={(e) => {handleSearch(e.target.value)}}>asdasd</TextField>
+      
           <Scrollbar>
-            <TableContainer sx={{ minWidth: 200 }}>
         
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, 
-                      // role, status, company, 
-                      avatarUrl, 
-                      // isVerified 
+                    const { id_makanan, nama_makanan, image1, kecamatan
+                      
                     } = row;
                     // const selectedUser = selected.indexOf(name) !== -1;
 
                     return (
 
                     
-                      <Grid key={id} container spacing={2} style={{marginBottom:"10px"}}>
+                      <Grid key={id_makanan} container spacing={2} style={{marginBottom:"10px"}}>
                       <Grid item xs={12} sm={12} md={12} lg={12}>
-                        <AppWidgetSummary image={avatarUrl} title={name} total={714000} icon={'ant-design:android-filled'} />
+                        <AppWidgetSummary id={id_makanan} kecamatan={kecamatan} image={image1} makanan={nama_makanan} icon={'ant-design:android-filled'} />
                       </Grid>
                       </Grid>
                     );
@@ -181,15 +199,12 @@ export default function UserPage() {
                   </Paper>
                
                 )}
-            </TableContainer>
           </Scrollbar>
-:
-<></>
-}
+      
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={USERLIST.length}
+            count={search.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

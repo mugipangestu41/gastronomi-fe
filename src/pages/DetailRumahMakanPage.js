@@ -189,7 +189,6 @@ export default function DetailRumahMakanPage() {
             <Card>
               <div style={{marginLeft:"10px", marginTop:"10px", marginBottom:"10px", marginRight:"10px"}}>
             <Typography variant='h5'>{kecamatanName}</Typography>
-            {/* <Typography variant='subtitle1'>Menjelajah Gastronomi Bandung Barat bersama Renita</Typography> */}
             <Divider variant="fullWidth" style={{ margin: "10px 0"}}/>
             <Typography variant='subtitle2' style={{textAlign:"justify"}}>
             Makanan khas tradisional Sunda tersedia di kedai halal dan kasual ini, dengan taman dan taman bermain.
@@ -202,7 +201,6 @@ export default function DetailRumahMakanPage() {
             <Card>
               <div style={{marginLeft:"10px", marginTop:"10px", marginBottom:"10px", marginRight:"10px"}}>
             <Typography variant='h5'>Menu</Typography>
-            {/* <Typography variant='subtitle1'>Menjelajah Gastronomi Bandung Barat bersama Renita</Typography> */}
             <Divider variant="fullWidth" style={{ margin: "10px 0"}}/>
            {/* <Card> */}
           <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />

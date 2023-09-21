@@ -29,18 +29,22 @@ AppWidgetSummary.propTypes = {
   color: PropTypes.string,
   icon: PropTypes.string,
   image: PropTypes.string,
-  title: PropTypes.string.isRequired,
-  total: PropTypes.number.isRequired,
   sx: PropTypes.object,
+  makanan: PropTypes.string,
+  kecamatan: PropTypes.string,
+  id: PropTypes.string
 };
 
+const BACKEND_API = process.env.REACT_APP_BE  
+
 export default function AppWidgetSummary(
-  { 
+  { makanan, kecamatan, image, id,
   // image, title, total, icon, color = 'primary', sx, 
   ...other 
 }
 ) {
   return (
+    
     <Card
       
       style={{maxHeight: "220px"}}
@@ -48,20 +52,20 @@ export default function AppWidgetSummary(
     >
       <Grid container spacing={2}>\
       <Grid item xs={6} sm={6} md={6}>
-        <Paper style={{backgroundImage: 'url("http://localhost:3000/assets/ketan-bakar.jpg")', 
+        <Paper style={{backgroundImage: `url(${BACKEND_API}${image})`, 
           backgroundSize: "cover", backgroundRepeat: "no-repeat", height: "100vh",maxHeight:"220px"}}/>
       </Grid>
 
       <Grid item xs={5} sm={5} md={5} style={{marginTop: "10px", marginBottom: "10px"}}>
 
         
-        <Typography style={{textAlign:"left"}} variant="h4">Ketan Bakar</Typography>
+        <Typography style={{textAlign:"left"}} variant="h4">{makanan}</Typography>
 
         <Typography style={{textAlign:"left"}} variant="subtitle1" sx={{ opacity: 0.72 }}>
-          Kecamatan Lembang
+          {kecamatan}
         </Typography>
         {/* detail/uuid-makanan */}
-       <Button href='/detail/uuid' style={{marginTop: "35px", marginLeft:"-10px"}}>Selengkapnya</Button>
+       <Button href={`/detail/${id}`} style={{marginTop: "35px", marginLeft:"-10px"}}>Selengkapnya</Button>
       </Grid>
       </Grid>
       
