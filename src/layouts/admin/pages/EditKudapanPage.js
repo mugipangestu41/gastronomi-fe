@@ -301,7 +301,7 @@ export default function EditKudapanPage() {
   return (
     <>
       <Helmet>
-        <title> Gastronita | Detail Kudapan </title>
+        <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Detail Kudapan </title>
       </Helmet>
       <Container maxWidth="md"> 
         <Grid container spacing={3}>
@@ -381,7 +381,7 @@ export default function EditKudapanPage() {
               <div className="form-group">
               {
                   uploadProgress !== null ? 
-                  <h5 style={{marginBottom: "-20px"}}>Upload Percentage {uploadProgress}%</h5>
+                  <h5>Upload Percentage {uploadProgress}%</h5>
                   :
                   <></>
                 }
@@ -407,7 +407,7 @@ export default function EditKudapanPage() {
               <div className="form-group">
               {
                   uploadProgress2 !== null ? 
-                  <h5 style={{marginBottom: "-20px"}}>Upload Percentage {uploadProgress2}%</h5>
+                  <h5>Upload Percentage {uploadProgress2}%</h5>
                   :
                   <></>
                 }

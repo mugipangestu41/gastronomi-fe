@@ -50,7 +50,7 @@ export default function DetailKecamatan() {
   return (
     <>
       <Helmet>
-        <title> Gastronita | Detail Kecamatan </title>
+        <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Detail Kecamatan </title>
       </Helmet>
 
       <Container maxWidth="lg">
@@ -86,7 +86,7 @@ export default function DetailKecamatan() {
               <center style={{marginTop:"10px"}}>
                 
                 <Button href={`/kudapan/${kecamatan?.kecamatan}`} variant='contained' color='inherit'>Kudapan</Button>
-                <Button href={`/rumah-makan/${kecamatan?.kecamatan}`}  style={{marginLeft:"20px"}} variant='contained' color='inherit'>Rumah Makan</Button>
+                <Button href={`/aktivitas/${kecamatan?.kecamatan}`}  style={{marginLeft:"20px"}} variant='contained' color='inherit'>Aktivitas Gastronomi</Button>
               {/* <img width={"150px"} src="http://localhost:3000/assets/gastro.jpeg" alt='infografis'/> */}
               </center>
               </div>

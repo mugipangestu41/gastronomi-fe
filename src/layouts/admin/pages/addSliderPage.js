@@ -101,7 +101,7 @@ export default function AddSliderPage() {
   return (
     <>
       <Helmet>
-        <title> Gastronita | Detail Slider </title>
+        <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Detail Slider </title>
       </Helmet>
       {/* {
         console.log(test2)

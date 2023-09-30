@@ -152,18 +152,14 @@ export default function RumahMakanPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard | Minimal UI </title>
+        <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Aktivitas Gastronomi </title>
       </Helmet>
 
       <Container maxWidth="md">
      
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Rumah Makan di Kecamatan {`${rumahMakanId}`}
+          Aktivitas Gastronomi di Kecamatan {`${rumahMakanId}`}
         </Typography>
-
-{
-  console.log(rumahMakan)
-}
 
  
         {/* <Card> */}

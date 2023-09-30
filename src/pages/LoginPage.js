@@ -46,7 +46,7 @@ export default function LoginPage() {
   return (
     <>
       <Helmet>
-        <title> Login | Minimal UI </title>
+        <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Login </title>
       </Helmet>
 
       <StyledRoot>

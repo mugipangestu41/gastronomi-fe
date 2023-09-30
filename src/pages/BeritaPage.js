@@ -26,34 +26,13 @@ import {
   TablePagination,
   Grid,
 } from '@mui/material';
-// components
-// import Label from '../components/label';
-// import Iconify from '../components/iconify';
+
 import {
-  // AppTasks,
-  // AppNewsUpdate,
-  // AppOrderTimeline,
-  // AppCurrentVisits,
-  // AppWebsiteVisits,
-  // AppTrafficBySite,
-  AppWidgetSummary,
-  // AppCurrentSubject,
-  // AppConversionRates,
+  AppNews,
 } from '../sections/@dashboard/app';
 import Scrollbar from '../components/scrollbar';
 // sections
 import { UserListToolbar } from '../sections/@dashboard/user';
-// mock
-
-
-// const TABLE_HEAD = [
-//   { id: 'name', label: 'Name', alignRight: false },
-//   { id: 'company', label: 'Company', alignRight: false },
-//   { id: 'role', label: 'Role', alignRight: false },
-//   { id: 'isVerified', label: 'Verified', alignRight: false },
-//   { id: 'status', label: 'Status', alignRight: false },
-//   { id: '' },
-// ];
 
 // ----------------------------------------------------------------------
 
@@ -82,26 +61,25 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, (_user) => _user.nama_makanan.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(array, (_user) => _user.judul.toLowerCase().indexOf(query.toLowerCase()) !== -1);
   }
   return stabilizedThis.map((el) => el[0]);
 }
 
 
-export default function KudapanPage() {
-  const wKecamatan = window.location.pathname.split('/')[2].includes('%20') ? window.location.pathname.split('/')[2].replaceAll('%20', ' ') : window.location.pathname.split('/')[2]
+export default function BeritaPage() {
   const API_URL = process.env.REACT_APP_API
-  const [kudapan, setKudapan] = useState([])
-  const getAllKudapanByKecamatan = async () => {
+  const [berita, setBerita] = useState([])
+  const getAllBerita = async () => {
     try {
-      await axios.get(`${API_URL}join/allKudapanByKecamatan?kecamatan=${wKecamatan}`)
+      await axios.get(`${API_URL}berita/allBerita`)
       .then(({data}) => {
         // setDetailKecamatan(data?.data[0])
-        setKudapan(data?.data)
+        setBerita(data?.data)
       })
       .catch((err) =>
       {if(err.response.status === 404){
-        setKudapan([])
+        setBerita([])
       }})
     } catch (error) {
       console.log(error)
@@ -109,11 +87,10 @@ export default function KudapanPage() {
   }
 
   useEffect(() => {
-    getAllKudapanByKecamatan()
+    getAllBerita()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   // const theme = useTheme();
-  const kecamatanName = wKecamatan.charAt(0).toUpperCase() + wKecamatan.slice(1);
 
   // const [open, setOpen] = useState(null);
 
@@ -143,22 +120,22 @@ export default function KudapanPage() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - kudapan.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - berita.length) : 0;
 
-  const filteredUsers = applySortFilter(kudapan, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(berita, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
   return (
     <>
       <Helmet>
-        <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Kudapan </title>
+        <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Berita </title>
       </Helmet>
 
       <Container maxWidth="md">
       
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Kudapan di Kecamatan {`${kecamatanName}`}
+          Berita
         </Typography>
 
 
@@ -169,7 +146,7 @@ export default function KudapanPage() {
           <Scrollbar>
               
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, nama_makanan, kecamatan, image1,
+                    const { id, judul, image1, content
                       // role, status, company, 
                       // avatarUrl, 
                       // isVerified 
@@ -181,7 +158,7 @@ export default function KudapanPage() {
                     
                       <Grid key={id} container spacing={3} style={{marginBottom:"10px"}}>
                       <Grid item xs={12} sm={12} md={12}>
-                        <AppWidgetSummary makanan={nama_makanan} id={id} image={image1} kecamatan={kecamatan} title={nama_makanan} total={714000} icon={'ant-design:android-filled'} />
+                        <AppNews judul={judul} id={id} image1={image1} content={content}/>
                       </Grid>
                       </Grid>
                      
@@ -217,7 +194,7 @@ export default function KudapanPage() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={kudapan.length}
+            count={berita.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

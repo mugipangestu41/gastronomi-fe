@@ -12,7 +12,7 @@ import {
   Stack,
   Paper,
   // Avatar,
-  Button,
+  // Button,
   Popover,
   TableRow,
   MenuItem,
@@ -23,7 +23,6 @@ import {
   IconButton,
   TableContainer,
   TablePagination,
-  Grid,
 } from '@mui/material';
 // components
 // import Label from '../../../components/label';
@@ -38,7 +37,9 @@ import { UserListHead2, UserListToolbar } from '../../../sections/@dashboard/use
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'rumah_makan', label: 'Nama Aktivitas', alignRight: false },
+  { id: 'nama', label: 'Nama', alignRight: false },
+  { id: 'komentar', label: 'Komentar', alignRight: false },
+  { id: 'tanggal', label: 'Tanggal', alignRight: false },
   { id: '' },
 ];
 
@@ -68,12 +69,12 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, (_user) => _user.nama_makanan.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(array, (_user) => _user.komentar.toLowerCase().indexOf(query.toLowerCase()) !== -1);
   }
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function AdminRumahMakanPage() {
+export default function KomentarPage() {
   const [open, setOpen] = useState(null);
 
   const [page, setPage] = useState(0);
@@ -82,7 +83,7 @@ export default function AdminRumahMakanPage() {
 
   const [selected, setSelected] = useState([]);
 
-  const [orderBy, setOrderBy] = useState('rumahMakan');
+  const [orderBy, setOrderBy] = useState('komentar');
 
   const [filterName, setFilterName] = useState('');
 
@@ -90,28 +91,26 @@ export default function AdminRumahMakanPage() {
 
   const navigate = useNavigate();
 
-  const [rumahMakan, setRumahMakan] = useState([])
+  const [komentar, setKomentar] = useState([])
 
   useEffect(() => {
-    localStorage.setItem("rumahMakan", window.location.pathname)
     if(localStorage.getItem("token") == null) { 
       navigate("/login")
       window.location.reload()
     }
-    getRumahMakan()
+    getKomentar()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   
   const API_URL = process.env.REACT_APP_API
   const [clickedId, setClickedId] = useState()
   const headers = {'Authorization': `Bearer ${localStorage.getItem('token')}`}
-  const wKecamatan = window.location.pathname.split('/')[3].includes('%20') ? window.location.pathname.split('/')[3].replaceAll('%20', ' ') : window.location.pathname.split('/')[3]
-  const wId = window.location.pathname.split('/')[4]
-  const getRumahMakan = async () => {
+
+  const getKomentar = async () => {
     try {
-      await axios.get(`${API_URL}join/allRumahMakanByKecamatan?kecamatan=${wKecamatan}`, {headers})
+      await axios.get(`${API_URL}komentar/allKomentar`, {headers})
       .then(({data}) => {
-        setRumahMakan(data?.data)
+        setKomentar(data?.data)
       })
       .catch((err) =>
       {
@@ -121,9 +120,10 @@ export default function AdminRumahMakanPage() {
           console.log("auth failed")
         }
         if(err.response.status === 404){
-          setRumahMakan([])
+          setKomentar([])
         }
-    })
+    
+      })
     } catch (error) {
       console.log(error)
     }
@@ -132,9 +132,9 @@ export default function AdminRumahMakanPage() {
   const handleDelete = async () => {
     try {
       handleCloseMenu();
-      axios.delete(`${API_URL}rumahMakan/deleteRumahMakanById?id=${clickedId}`, {headers})
+      axios.delete(`${API_URL}komentar/deleteKomentarById?id=${clickedId}`, {headers})
       .then(() => {
-        getRumahMakan();
+        getKomentar();
       })
       .catch((err) => {
         console.log(err)
@@ -161,27 +161,12 @@ export default function AdminRumahMakanPage() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = rumahMakan.map((n) => n.rumahMakan);
+      const newSelecteds = komentar.map((n) => n.komentar);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
-
-  // const handleClick = (event, rumahMakan) => {
-  //   const selectedIndex = selected.indexOf(rumahMakan);
-  //   let newSelected = [];
-  //   if (selectedIndex === -1) {
-  //     newSelected = newSelected.concat(selected, rumahMakan);
-  //   } else if (selectedIndex === 0) {
-  //     newSelected = newSelected.concat(selected.slice(1));
-  //   } else if (selectedIndex === selected.length - 1) {
-  //     newSelected = newSelected.concat(selected.slice(0, -1));
-  //   } else if (selectedIndex > 0) {
-  //     newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
-  //   }
-  //   setSelected(newSelected);
-  // };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -197,72 +182,85 @@ export default function AdminRumahMakanPage() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rumahMakan.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - komentar.length) : 0;
 
-  const filteredUsers = applySortFilter(rumahMakan, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(komentar, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
   return (
     <>
       <Helmet>
-        <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Aktivitas Gastronomi </title>
+        <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Komentar </title>
       </Helmet>
 
       <Container maxWidth="md">
-        {
-          localStorage.getItem('editKecamatan') !== null ?
-          <Grid item xs={12} sm={12} md={12}>
-          <p><a href='/admin'>Kecamatan</a> &#129058;
-          &nbsp;<a href={`${localStorage.getItem('editKecamatan')}`} >Edit Kecamatan</a> &#129058;
-          &nbsp;<a style={{color:"black"}}>Aktivitas Gastronomi</a> 
-          </p>
-          </Grid>
-          :
-          <></>
-        }
-       
+        <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Aktivitas Gastronomi di Kecamatan {`${wKecamatan}`}
+            Komentar
           </Typography>
-          <Button style={{marginBottom:"15px"}} href={`/admin/addRumahMakanPage/${wKecamatan}/${wId}`} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
-          Aktivitas Gastronomi
-          </Button>
+        </Stack>
 
         <Card>
           <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
 
           <Scrollbar>
-            <TableContainer sx={{ minWidth: 300 }}>
+            <TableContainer sx={{ minWidth: 500 }}>
               <Table>
                 <UserListHead2
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={rumahMakan.length}
+                  rowCount={komentar.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id_rumah_makan, nama_rumah_makan} = row;
-                    const selectedUser = selected.indexOf(rumahMakan) !== -1;
+                    const { id, nama, komentar, created_at} = row;
+                    const selectedUser = selected.indexOf(komentar) !== -1;
 
                     return (
-                      <TableRow hover key={id_rumah_makan} tabIndex={-1} role="checkbox" selected={selectedUser}>
-                        {/* <TableCell padding="checkbox">
-                          <Checkbox checked={selectedUser} onChange={(event) => handleClick(event, rumahMakan)} />
-                        </TableCell> */}
+                      <TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedUser}>
+                        <TableCell component="th" scope="row" padding="none">
+                          <Stack direction="row" alignItems="center" spacing={2}>
+                            <Typography style={{marginLeft: "15px"}} variant="subtitle2" noWrap>
+                              {nama}
+                            </Typography>
+                          </Stack>
+                        </TableCell>
 
                         <TableCell component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="center" spacing={2}>
-                            <a style={{marginLeft: "15px"}} href={`/admin/editAktivitas/${id_rumah_makan}`}>{nama_rumah_makan}</a>
+                          <Typography style={{marginLeft: "15px"}} variant="subtitle2" noWrap>
+                              {komentar.substring(0,50)}...
+                            </Typography>
+                          </Stack>
+                        </TableCell>
+
+                        <TableCell component="th" scope="row" padding="none">
+                          <Stack direction="row" alignItems="center" spacing={2}>
+                          <Typography style={{marginLeft: "15px"}} variant="subtitle2" noWrap>
+                            {new Date(created_at).toLocaleString(
+                            "id-ID",
+                              {
+                                timeZone: 'UTC',
+                                weekday: "long",
+                                month: "short",
+                                day: "2-digit",
+                                year: "numeric",
+                                hour: "numeric",
+                                minute: "numeric",
+                                second: "numeric",
+                              }
+                            )}
+                            </Typography>
                           </Stack>
                         </TableCell>
 
                         <TableCell align="right">
-                          <IconButton size="large" color="inherit" onClick={(event) => {handleOpenMenu(event, id_rumah_makan)}}>
+                          <IconButton size="large" color="inherit" onClick={(event) => {handleOpenMenu(event, id)}}>
                             <Iconify icon={'eva:more-vertical-fill'}/>
                           </IconButton>
                         </TableCell>
@@ -306,7 +304,7 @@ export default function AdminRumahMakanPage() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={rumahMakan.length}
+            count={komentar.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

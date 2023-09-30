@@ -1,35 +1,15 @@
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
-import { useLocation, NavLink } from 'react-router-dom';
-
+import { NavLink } from 'react-router-dom';
+import axios from 'axios';
 // @mui
-// import { styled, alpha } from '@mui/material/styles';
 import { Button } from '@mui/material';
-// mock
-// import account from '../../../_mock/account';
-// hooks
-// import useResponsive from '../../../hooks/useResponsive';
-// components
-// import Logo from '../../../components/logo';
-// import Scrollbar from '../../../components/scrollbar';
-// import NavSection from '../../../components/nav-section';
+
 //
 import Iconify from '../../../components/iconify';
-// import navConfig from './config';
 import './navbar.css'
 // ----------------------------------------------------------------------
 
-// const NAV_WIDTH = 280;
-
-// const StyledAccount = styled('div')(({ theme }) => ({
-//   display: 'flex',
-//   alignItems: 'center',
-//   padding: theme.spacing(2, 2.5),
-//   borderRadius: Number(theme.shape.borderRadius) * 1.5,
-//   backgroundColor: alpha(theme.palette.grey[500], 0.12),
-// }));
-
-// ----------------------------------------------------------------------
 
 Nav.propTypes = {
   openNav: PropTypes.bool,
@@ -37,90 +17,60 @@ Nav.propTypes = {
 };
 
 export default function Nav({ openNav, onCloseNav }) {
-  const { pathname } = useLocation();
+  // const { pathname } = useLocation();
+  const [beranda, setBeranda] = useState(null)
+  const API_URL = process.env.REACT_APP_API
 
-  // const isDesktop = useResponsive('up', 'lg');
+  const getBeranda = async () => {
+    try {
+      await axios.get(`${API_URL}beranda/allBeranda`)
+      .then(({data}) => {
+        setBeranda(data?.data[0]?.logo)
+        localStorage.setItem("judul", data?.data[0]?.judul)
+      })
+      .catch((err) =>
+      {
+        if(err.response.status === 404){
+          setBeranda([])
+        }
+    })
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   useEffect(() => {
+    getBeranda();
     if (openNav) {
       onCloseNav();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname]);
+  }, []);
 
-  // const renderContent = (
-  //   <Scrollbar
-  //     sx={{
-  //       height: 1,
-  //       '& .simplebar-content': { height: 1, display: 'flex', flexDirection: 'column' },
-  //     }}
-  //   >
-  //     <Box sx={{ px: 2.5, py: 3, display: 'inline-flex' }}>
-  //       <Logo />
-  //     </Box>
+ 
 
-      
-
-  //     <NavSection data={navConfig} />
-
-  //     <Box sx={{ flexGrow: 1 }} />
-
-     
-  //   </Scrollbar>
-  // );
-
+  const BACKEND_API = process.env.REACT_APP_BE
   const [showNavbar, setShowNavbar] = useState(false)
 
   const handleShowNavbar = () => {
     setShowNavbar(!showNavbar)
   }
   return (
-    // <Box
-    //   component="nav"
-    //   sx={{
-    //     flexShrink: { lg: 0 },
-    //     width: { lg: NAV_WIDTH },
-    //   }}
-    // >
-    //   {isDesktop ? (
-    //     <Drawer
-    //       open
-    //       variant="permanent"
-    //       PaperProps={{
-    //         sx: {
-    //           width: NAV_WIDTH,
-    //           bgcolor: 'background.default',
-    //           borderRightStyle: 'dashed',
-    //         },
-    //       }}
-    //     >
-    //       {renderContent}
-    //       <center style={{marginBottom:"10px"}}><Typography>&copy; Renita</Typography></center>
-    //     </Drawer>
-    //   ) : (
-    //     <Drawer
-    //       open={openNav}
-    //       onClose={onCloseNav}
-    //       ModalProps={{
-    //         keepMounted: true,
-    //       }}
-    //       PaperProps={{
-    //         sx: { width: NAV_WIDTH },
-    //       }}
-    //     >
-    //       {renderContent}
-    //       <center style={{marginBottom:"10px"}}><Typography>&copy; Renita</Typography></center>
-    //     </Drawer>
-    //   )}
-    // </Box>
-    
     <div  className='sticky'>
       
     <nav className="navbar" >
     <div className="container">
       <div className="logo">
-      {/* <img src="/favicon/black_invinita.svg" width="15%" alt="logo"/> */}
-      <h1>Gastronita</h1>
+        {
+          beranda !== null ?
+          <NavLink to='/'>
+            <img role='presentation' src={`${BACKEND_API}${beranda}`} width="15%" alt={beranda}/>
+          </NavLink>
+          :
+          <img src='' alt='logo'/>
+        }
+      
+      {/* <NavLink to="/" style={{color:"black", textDecoration:"none", fontSize:"20px", fontWeight:"bold"}}>{beranda}</NavLink> */}
       </div>
       <div className="menu-icon" onClick={handleShowNavbar} role='presentation'>
       <Iconify icon={'eva:more-vertical-fill'} />
@@ -141,13 +91,16 @@ export default function Nav({ openNav, onCloseNav }) {
         <ul style={{marginLeft: "10px"}}>
           
           <li>
-            <NavLink onClick={handleShowNavbar} to="/beranda">Beranda</NavLink>
+            <NavLink style={{fontWeight:'bold'}} onClick={showNavbar && 'active' ? handleShowNavbar : {}} to="/beranda">Beranda</NavLink>
           </li>
           <li>
-            <NavLink onClick={handleShowNavbar} to="/pencarian">Pencarian</NavLink>
+            <NavLink style={{fontWeight:'bold'}} onClick={showNavbar && 'active' ? handleShowNavbar : {}} to="/pencarian">Pencarian</NavLink>
           </li>
           <li>
-            <NavLink onClick={handleShowNavbar} to="/destinasi">Destinasi</NavLink>
+            <NavLink style={{fontWeight:'bold'}} onClick={showNavbar && 'active' ? handleShowNavbar : {}} to="/destinasi">Destinasi</NavLink>
+          </li>
+          <li>
+            <NavLink style={{fontWeight:'bold'}} onClick={showNavbar && 'active' ? handleShowNavbar : {}} to="/berita">Berita</NavLink>
           </li>
          
          

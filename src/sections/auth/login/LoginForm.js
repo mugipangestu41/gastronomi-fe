@@ -16,7 +16,24 @@ export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const API_URL = process.env.REACT_APP_API
 
+  const getBeranda = async () => {
+    try {
+      await axios.get(`${API_URL}beranda/allBeranda`)
+      .then(({data}) => {
+        localStorage.setItem("judul", data?.data[0]?.judul)
+      })
+      .catch((err) =>
+      {
+        if(err.response.status === 404){
+          console.log(err)
+        }
+    })
+    } catch (error) {
+      console.log(error)
+    }
+  }
   useEffect(() => {
+    getBeranda()
     if(localStorage.getItem("token") !== null) { 
       navigate("/admin")
     }

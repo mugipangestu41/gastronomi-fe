@@ -13,21 +13,6 @@ import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
 /* eslint-disable camelcase */
 
-// components
-// import Iconify from '../components/iconify';
-// // sections
-// import {
-//   AppTasks,
-//   AppNewsUpdate,
-//   AppOrderTimeline,
-//   AppCurrentVisits,
-//   AppWebsiteVisits,
-//   AppTrafficBySite,
-//   AppWidgetSummary,
-//   AppCurrentSubject,
-//   AppConversionRates,
-// } from '../sections/@dashboard/app';
-
 // ----------------------------------------------------------------------
 
 export default function EditBerandaPage() {
@@ -35,13 +20,18 @@ export default function EditBerandaPage() {
   // const navigate = useNavigate();
   const navigate = useNavigate();
   const formData = new FormData();
+  const formData2 = new FormData();
 
   const [uploadProgress, setUploadProgress] = useState(null)
+  const [uploadProgress2, setUploadProgress2] = useState(null)
   const [errCreate, setErrCreate] = useState('')
   const [errCreateImage1, setErrCreateImage1] = useState('')
+  const [errCreateImage2, setErrCreateImage2] = useState('')
   // const [detailBeranda, setDetailBeranda] = useState([])
   const [image1, setImage1] = useState('')
+  const [image2, setImage2] = useState('')
   const [tempImage1, setTempImage1] = useState()
+  const [tempImage2, setTempImage2] = useState()
   const [juduls, setJudul] = useState('')
   const [subJuduls, setSubJudul] = useState('')
   const [contents, setContent] = useState('')
@@ -51,6 +41,14 @@ export default function EditBerandaPage() {
     formData.append("files", event.target.files[0])
     // console.log(URL.createObjectURL(formData.get("files")))
     setTempImage1(event.target.files[0])
+   
+  };
+
+  const onFileChange2 = async (event) => { 
+    setTempImage2()
+    formData2.append("files", event.target.files[0])
+    // console.log(URL.createObjectURL(formData.get("files")))
+    setTempImage2(event.target.files[0])
    
   };
 
@@ -67,6 +65,7 @@ export default function EditBerandaPage() {
         setSubJudul(data?.data[0]?.sub_judul)
         setContent(data?.data[0]?.content)
         setImage1(data?.data[0]?.image1)
+        setImage2(data?.data[0]?.logo)
       })
       .catch((err) =>
       {if(err.response.status === 401){
@@ -90,6 +89,7 @@ export default function EditBerandaPage() {
           content: contents
         }, {headers})
         .then(() => {
+          localStorage.setItem("judul", juduls)
           setErrCreate(`Success data beranda di edit`)
           navigate(`/admin/beranda`)
 
@@ -124,6 +124,23 @@ export default function EditBerandaPage() {
     }
   };
 
+  const handleImage2 = async () => {
+    try {
+      formData2.append("files", tempImage2)
+      if(formData2.get("files") == null){
+        formData2.delete("files")
+        setErrCreateImage1("Kolom file wajib di isi")
+      }
+      else {
+        setUploadProgress2(null)
+        handleUploadImage2()
+      }
+    } catch (err) {
+      window.alert(`Error2`)
+      console.log(err);
+    }
+  };
+
  
 
   const handleUploadImage1 = async () => {
@@ -151,6 +168,41 @@ export default function EditBerandaPage() {
         .catch((e) => {
           setErrCreateImage1(e?.response?.data?.messages)
           formData.delete("files")
+        })
+        
+        
+    } catch (err) {
+      window.alert(`Error`)
+      console.log(err);
+      navigate(`/admin/beranda`)
+    }
+  };
+
+  const handleUploadImage2 = async () => {
+    // e.preventDefault();
+    try {
+        const headers = {'Content-Type': 'multipart/form-data', 'Authorization': `Bearer ${localStorage.getItem('token')}`}
+        await axios.put(`${API_URL}beranda/updateLogo`,
+        formData2, {headers, 
+          onUploadProgress:(progressEvent) => {
+            const percentCompleted = Math.round((progressEvent.loaded / progressEvent.total)*100);
+            console.log(`percentage upload ${percentCompleted}%`) 
+            setUploadProgress2(percentCompleted)
+            if (percentCompleted === 100) {
+              console.log("Upload Complete!")
+            }
+          }
+        })
+        .then(() => {
+          setErrCreateImage2(`Success data logo berhasil diubah`)
+          // window.alert(`Success data beranda ${berandas} ditambahkan`)
+          formData2.delete("files")
+          navigate(`/admin/beranda`)
+
+        })
+        .catch((e) => {
+          setErrCreateImage2(e?.response?.data?.messages)
+          formData2.delete("files")
         })
         
         
@@ -208,7 +260,7 @@ export default function EditBerandaPage() {
   return (
     <>
       <Helmet>
-        <title> Gastronita | Detail Beranda </title>
+        <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Detail Beranda </title>
       </Helmet>
       <Container maxWidth="md"> 
         <Grid container spacing={3}>
@@ -255,7 +307,7 @@ export default function EditBerandaPage() {
               <div className="form-group">
               {
                   uploadProgress !== null ? 
-                  <h5 style={{marginBottom: "-20px"}}>Upload Percentage {uploadProgress}%</h5>
+                  <h5>Upload Percentage {uploadProgress}%</h5>
                   :
                   <></>
                 }
@@ -263,6 +315,32 @@ export default function EditBerandaPage() {
                   <FormLabel style={{color:"black"}}>Image </FormLabel>
                   <Input accept="image/*" type="file" name="image1" onChange={onFileChange} required/>
                   <Button onClick={handleImage1} variant='contained' fullWidth>Upload</Button>
+              </div>
+              <Divider style={{marginBottom:"20px"}}/>
+
+
+
+              <div className='form-group'>
+              <FormLabel style={{color:"black", fontWeight:"bold"}}>Logo</FormLabel>
+              {
+                tempImage2 !== undefined ?
+                <img src={URL.createObjectURL(tempImage2)} alt="asd" height={200} />
+
+                :
+                <img src={`${BACKEND_API}${image2}`} alt="asd" height={200} />
+              }
+              </div>
+              <div className="form-group">
+              {
+                  uploadProgress2 !== null ? 
+                  <h5>Upload Percentage {uploadProgress2}%</h5>
+                  :
+                  <></>
+                }
+              <h5>{errCreateImage2}</h5>
+                  <FormLabel style={{color:"black"}}>Logo </FormLabel>
+                  <Input accept="image/*" type="file" name="logo" onChange={onFileChange2} required/>
+                  <Button onClick={handleImage2} variant='contained' fullWidth>Upload</Button>
               </div>
               <Divider style={{marginBottom:"20px"}}/>
       

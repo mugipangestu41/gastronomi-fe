@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 import { filter } from 'lodash';
 // import { sentenceCase } from 'change-case';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios'
 
 // @mui
@@ -24,7 +24,6 @@ import {
   // TableContainer,
   TablePagination,
   Grid,
-  TextField,
 } from '@mui/material';
 // components
 // import Label from '../components/label';
@@ -41,6 +40,7 @@ import {
   // AppConversionRates,
 } from '../sections/@dashboard/app';
 import Scrollbar from '../components/scrollbar';
+import { UserListToolbar } from '../sections/@dashboard/user';
 // sections
 // import { UserListToolbar } from '../sections/@dashboard/user';
 // mock
@@ -75,12 +75,18 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(array, (_user) => _user.nama_makanan.toLowerCase().indexOf(query.toLowerCase()) !== -1);
   }
   return stabilizedThis.map((el) => el[0]);
 }
 
+
 export default function SearchPage() {
+
+  const handleFilterByName = (event) => {
+    setPage(0);
+    setFilterName(event.target.value);
+  };
   const [open, setOpen] = useState(null);
 
   const [page, setPage] = useState(0);
@@ -89,7 +95,8 @@ export default function SearchPage() {
 
   const orderBy = "name"
 
-  const filterName = ''
+  const [filterName, setFilterName] = useState('');
+
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -109,22 +116,27 @@ export default function SearchPage() {
   
   const [search, setSearch] = useState([])
   const handleSearch = async (e) => {
-    try {
-      await axios.get(`${API_URL}join/allMakanan?nama_makanan=${e}`)
-      .then(({data}) => {
-        setSearch(data?.data)
+      try {
+        await axios.get(`${API_URL}join/allMakanan?nama_makanan=${e}`)
+        .then(({data}) => {
+          setSearch(data?.data)
+        })
+        .catch((err) =>
+        {
+          if(err.response.status === 404){
+            setSearch([])
+          }
       })
-      .catch((err) =>
-      {
-        if(err.response.status === 404){
-          setSearch([])
-          console.log("err")
-        }
-    })
-    } catch (error) {
-      console.log(error)
-    }
+      } catch (error) {
+        console.log(error)
+      }
+    
   };
+
+  useEffect(() => {
+    handleSearch('')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const handleChangeRowsPerPage = (event) => {
     setPage(0);
@@ -145,7 +157,7 @@ export default function SearchPage() {
   return (
     <>
       <Helmet>
-        <title> User | Minimal UI </title>
+        <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Pencarian </title>
       </Helmet>
       
       <Container maxWidth="md">
@@ -153,8 +165,7 @@ export default function SearchPage() {
           Pencarian
         </Typography>
         {/* <Card> */}
-          {/* <UserListToolbar filterName={filterName} onFilterName={handleFilterByName} /> */}
-          <TextField style={{marginBottom: "20px"}} label="Cari makanan..." onChange={(e) => {handleSearch(e.target.value)}}>asdasd</TextField>
+          <UserListToolbar filterName={filterName} onFilterName={handleFilterByName} />
       
           <Scrollbar>
         
@@ -200,16 +211,21 @@ export default function SearchPage() {
                
                 )}
           </Scrollbar>
-      
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={search.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
+          {
+            search?.length !== 0 ?
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 25]}
+                component="div"
+                count={search.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+              />
+            :
+            <></>
+          }
+          
           
         {/* </Card> */}
       </Container>

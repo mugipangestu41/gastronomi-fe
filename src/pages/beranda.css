@@ -1,3 +1,25 @@
+.scrollhost {
+    /* scrollbar-width: block; */
+   -ms-overflow-style: none;
+   /* border-radius: 20; */
+  }
+  
+  .scrollhost::-webkit-scrollbar {
+    width: 5px;
+    height: 8px;
+    background-color: #aaa;
+  }
+  *,
+  *:before,
+  *:after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  :root {
+    --font-color: 230 35% 7%;
+  }
+
 .text1 {
     font-weight: bold;
     font-size: 80px;
@@ -16,4 +38,21 @@
     .paper1 {
         max-height: 150px;
     }
+}
+
+.sliderHeight {
+    height: 400px;
+}
+
+@media (max-width: 768px) {
+    .sliderHeight {
+        height: 250px;
+    }
+}
+
+@media (max-width: 500px) {
+    .sliderHeight {
+        height: 140px;
+    }
+    
 }

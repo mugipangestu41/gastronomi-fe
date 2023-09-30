@@ -8,3 +8,5 @@ export { default as AppWidgetSummary } from './AppWidgetSummary';
 export { default as AppCurrentSubject } from './AppCurrentSubject';
 export { default as AppConversionRates } from './AppConversionRates';
 export { default as AppRumahMakan } from './AppRumahMakan';
+export { default as AppNews } from './AppNews';
+export { default as AppKudapanTerbaru} from './AppKudapanTerbaru'

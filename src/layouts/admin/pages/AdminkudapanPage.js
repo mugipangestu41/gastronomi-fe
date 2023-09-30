@@ -206,7 +206,7 @@ export default function AdminKudapanPage() {
   return (
     <>
       <Helmet>
-        <title> Kudapan | Minimal UI </title>
+        <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Kudapan </title>
       </Helmet>
 
       <Container maxWidth="md">

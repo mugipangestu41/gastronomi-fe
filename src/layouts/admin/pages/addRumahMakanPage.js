@@ -188,7 +188,7 @@ export default function AddRumahMakanPage() {
   return (
     <>
       <Helmet>
-        <title> Gastronita | Detail RumahMakan </title>
+        <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Detail RumahMakan </title>
       </Helmet>
       {/* {
         console.log(test2)
@@ -202,8 +202,8 @@ export default function AddRumahMakanPage() {
         <Grid item xs={12} sm={12} md={12}>
           <p><a href='/admin'>Kecamatan</a> &#129058;
           &nbsp;<a href={`${localStorage.getItem('editKecamatan')}`} >Edit Kecamatan</a> &#129058;
-          &nbsp;<a href={`${localStorage.getItem('rumahMakan')}`} >Rumah Makan</a> &#129058;
-          &nbsp;<a style={{color:"black"}}>Tambah Rumah Makan</a> 
+          &nbsp;<a href={`${localStorage.getItem('rumahMakan')}`} >Aktivitas Gastronomi</a> &#129058;
+          &nbsp;<a style={{color:"black"}}>Tambah Aktivitas Gastronomi</a> 
           </p>
         </Grid>
         :
@@ -211,16 +211,16 @@ export default function AddRumahMakanPage() {
         }
           <Grid item xs={12} sm={12} md={12}>
             <h5>{errCreate}</h5>
-            <h3>Tambah Rumah Makan di Kecamatan {wKecamatan}</h3>
+            <h3>Tambah Aktivitas Gastronomi di Kecamatan {wKecamatan}</h3>
             <form id='myform'>
             <Stack spacing={2} m={2}>
               
               <div className="form-group">
-              <TextField id="rumahMakan" label="Nama Rumah Makan" variant="outlined" onChange={(e) => setRumahMakan(e.target.value)} fullWidth required/>
+              <TextField id="rumahMakan" label="Nama Aktivitas" variant="outlined" onChange={(e) => setRumahMakan(e.target.value)} fullWidth required/>
               </div>
 
               <div className="form-group">
-              <TextField id="alamat" label="Alamat Rumah Makan" variant="outlined" onChange={(e) => setAlamatMakanan(e.target.value)} fullWidth required/>
+              <TextField id="alamat" label="Alamat Aktivitas" variant="outlined" onChange={(e) => setAlamatMakanan(e.target.value)} fullWidth required/>
               </div>
 
               {/* <div className="form-group">

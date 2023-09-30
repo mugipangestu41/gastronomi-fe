@@ -4,51 +4,36 @@ import { Helmet } from 'react-helmet-async';
 // import { useTheme } from '@mui/material/styles';
 import axios from 'axios';
 // import { useNavigate } from 'react-router-dom';
-import { Grid, Container, Button, TextField, Stack, Input, FormLabel, Divider } from '@mui/material';
+import { Grid, Container, Button, TextField, Stack, Input, FormLabel, Divider, FormGroup, Typography, InputLabel, Select, MenuItem } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+// import dayjs from 'dayjs';
+import moment from 'moment';
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
 /* eslint-disable camelcase */
 
-// components
-// import Iconify from '../components/iconify';
-// // sections
-// import {
-//   AppTasks,
-//   AppNewsUpdate,
-//   AppOrderTimeline,
-//   AppCurrentVisits,
-//   AppWebsiteVisits,
-//   AppTrafficBySite,
-//   AppWidgetSummary,
-//   AppCurrentSubject,
-//   AppConversionRates,
-// } from '../sections/@dashboard/app';
-
 // ----------------------------------------------------------------------
 
-export default function EditKecamatanPage() {
+export default function EditBeritaPage() {
   // const theme = useTheme();
   // const navigate = useNavigate();
   const navigate = useNavigate();
   const formData = new FormData();
-  const formData2 = new FormData();
 
   const [uploadProgress, setUploadProgress] = useState(null)
-  const [uploadProgress2, setUploadProgress2] = useState(null)
   const [errCreate, setErrCreate] = useState('')
   const [errCreateImage1, setErrCreateImage1] = useState('')
-  const [errCreateImage2, setErrCreateImage2] = useState('')
-  const [kecamatans, setKecamatan] = useState(null)
-  // const [detailKecamatan, setDetailKecamatan] = useState([])
+  const [beritas, setBerita] = useState(null)
+  // const [detailBerita, setDetailBerita] = useState([])
   const [image1, setImage1] = useState('')
   const [tempImage1, setTempImage1] = useState()
-  const [tempImage2, setTempImage2] = useState()
-  const [image2, setImage2] = useState('')
   const [contents, setContent] = useState('')
+  const [penuliss, setPenulis] = useState('')
+  const [statuss, setStatus] = useState(0)
   const wKecmatan = window.location.pathname.split('/')[3].includes('%20') ? window.location.pathname.split('/')[3].replaceAll('%20', ' ') : window.location.pathname.split('/')[3]
   const wId = window.location.pathname.split('/')[4]
   
@@ -61,27 +46,22 @@ export default function EditKecamatanPage() {
    
   };
 
-  const onFileChange2 = async (event) => { 
-    setTempImage2()
-    formData.append("files", event.target.files[0])
-    // console.log(URL.createObjectURL(formData.get("files")))
-    setTempImage2(event.target.files[0])
-   
-  };
-
   const API_URL = process.env.REACT_APP_API
   const BACKEND_API = process.env.REACT_APP_BE
   const headers = {'Authorization': `Bearer ${localStorage.getItem('token')}`}
+  const [tanggalBerita, setTanggalBerita] = useState(null)
 
-  const getDetailKecamatan = async () => {
+  const getDetailBerita = async () => {
     try {
-      await axios.get(`${API_URL}kecamatan/kecamatanByName?kecamatan_name=${wKecmatan}`, {headers})
+      await axios.get(`${API_URL}berita/beritaByIdAdmin?id=${wId}`, {headers})
       .then(({data}) => {
-        // setDetailKecamatan(data?.data[0])
-        setKecamatan(data?.data[0]?.kecamatan)
+        // setDetailBerita(data?.data[0])
+        setBerita(data?.data[0]?.judul)
         setContent(data?.data[0]?.content)
         setImage1(data?.data[0]?.image1)
-        setImage2(data?.data[0]?.image2)
+        setPenulis(data?.data[0]?.penulis)
+        setStatus(data?.data[0]?.status)
+        setTanggalBerita(data?.data[0]?.tanggal_berita?.substring(0,10))
       })
       .catch((err) =>
       {if(err.response.status === 401){
@@ -95,17 +75,19 @@ export default function EditKecamatanPage() {
   }
 
   const handleEdit = async () => {
-    // e.preventDefault();
     try {
         const headers = {'Authorization': `Bearer ${localStorage.getItem('token')}`}
-        await axios.put(`${API_URL}kecamatan/edit?id=${wId}`,
+        await axios.put(`${API_URL}berita/edit?id=${wId}`,
         {
-          kecamatan: kecamatans,
-          content: contents
+          tanggal_berita: tanggalBerita,
+          content: contents,
+          penulis: penuliss,
+          status: statuss,
+          judul: beritas
         }, {headers})
         .then(() => {
-          setErrCreate(`Success data kecamatan ${kecamatans} di edit`)
-          navigate(`/admin/editKecamatan/${kecamatans}/${wId}`)
+          setErrCreate(`Success data berita ${beritas} di edit`)
+          navigate(`/admin/editBeritaPage/${beritas}/${wId}`)
 
         })
         .catch((e) => {
@@ -117,7 +99,7 @@ export default function EditKecamatanPage() {
     } catch (err) {
       window.alert(`Error`)
       console.log(err);
-      navigate('/admin/kecamatan')
+      navigate('/admin/berita')
     }
   };
 
@@ -138,28 +120,13 @@ export default function EditKecamatanPage() {
     }
   };
 
-  const handleImage2 = async () => {
-    try {
-      formData2.append("files", tempImage2)
-      if(formData2.get("files") == null){
-        formData2.delete("files")
-        setErrCreateImage2("Kolom file wajib di isi")
-      }
-      else {
-        setUploadProgress2(null)
-        handleUploadImage2()
-      }
-    } catch (err) {
-      window.alert(`Error2`)
-      console.log(err);
-    }
-  };
+ 
 
   const handleUploadImage1 = async () => {
     // e.preventDefault();
     try {
         const headers = {'Content-Type': 'multipart/form-data', 'Authorization': `Bearer ${localStorage.getItem('token')}`}
-        await axios.put(`${API_URL}kecamatan/updateImage1ById?id=${wId}`,
+        await axios.put(`${API_URL}berita/updateImage1ById?id=${wId}`,
         formData, {headers, 
           onUploadProgress:(progressEvent) => {
             const percentCompleted = Math.round((progressEvent.loaded / progressEvent.total)*100);
@@ -171,10 +138,10 @@ export default function EditKecamatanPage() {
           }
         })
         .then(() => {
-          setErrCreateImage1(`Success data image 1 ${kecamatans} berhasil diubah`)
-          // window.alert(`Success data kecamatan ${kecamatans} ditambahkan`)
+          setErrCreateImage1(`Success data image 1 ${beritas} berhasil diubah`)
+          // window.alert(`Success data berita ${beritas} ditambahkan`)
           formData.delete("files")
-          navigate(`/admin/editKecamatan/${kecamatans}/${wId}`)
+          navigate(`/admin/editBeritaPage/${beritas}/${wId}`)
 
         })
         .catch((e) => {
@@ -186,48 +153,14 @@ export default function EditKecamatanPage() {
     } catch (err) {
       window.alert(`Error`)
       console.log(err);
-      navigate(`/admin/editKecamatan/${kecamatans}/${wId}`)
+      navigate(`/admin/editBeritaPage/${beritas}/${wId}`)
     }
   };
 
-  const handleUploadImage2 = async () => {
-    // e.preventDefault();
-    try {
-        const headers = {'Content-Type': 'multipart/form-data', 'Authorization': `Bearer ${localStorage.getItem('token')}`}
-        await axios.put(`${API_URL}kecamatan/updateImage2ById?id=${wId}`,
-        formData2, {headers, 
-          onUploadProgress:(progressEvent) => {
-            const percentCompleted = Math.round((progressEvent.loaded / progressEvent.total)*100);
-            console.log(`percentage upload ${percentCompleted}%`) 
-            setUploadProgress2(percentCompleted)
-            if (percentCompleted === 100) {
-              console.log("Upload Complete!")
-            }
-          }
-        })
-        .then(() => {
-          setErrCreateImage2(`Success data image 2 ${kecamatans} berhasil diubah`)
-          // window.alert(`Success data kecamatan ${kecamatans} ditambahkan`)
-          formData2.delete("files")
-          navigate(`/admin/editKecamatan/${kecamatans}/${wId}`)
-
-        })
-        .catch((e) => {
-          setErrCreateImage2(e?.response?.data?.messages)
-          formData2.delete("files")
-        })
-        
-        
-    } catch (err) {
-      window.alert(`Error`)
-      console.log(err);
-      navigate(`/admin/editKecamatan/${kecamatans}/${wId}`)
-    }
-  };
 
   useEffect(() => {
-    localStorage.setItem("editKecamatan", window.location.pathname)
-    getDetailKecamatan()
+    localStorage.setItem("editBerita", window.location.pathname)
+    getDetailBerita()
     if(localStorage.getItem("token") == null) { 
       navigate("/login")
       window.location.reload()
@@ -273,32 +206,46 @@ export default function EditKecamatanPage() {
   return (
     <>
       <Helmet>
-        <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Detail Kecamatan </title>
+        <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Detail Berita </title>
       </Helmet>
       <Container maxWidth="md"> 
         <Grid container spacing={3}>
         <Grid item xs={12} sm={12} md={12}>
-        <p><a href='/admin'>Kecamatan</a> &#129058; <a style={{color:"black"}}>Edit Kecamatan</a></p>
+        <p><a href='/admin/berita'>Berita</a> &#129058; <a style={{color:"black"}}>Edit Berita</a></p>
         </Grid>
-        <Grid item xs={12} sm={12} md={6}>
-          <Button href={`/admin/kudapan/${wKecmatan}/${wId}`} variant='outlined'>Kelola Kudapan di kecamatan {wKecmatan}</Button>
-        </Grid>
-
-        <Grid item xs={12} sm={12} md={6}>
-          <Button href={`/admin/aktivitas/${wKecmatan}/${wId}`} variant='outlined'>Kelola Aktivitas Gastronomi di Kecamatan {wKecmatan}</Button>
-        </Grid>
+       
           <Grid item xs={12} sm={12} md={12}>
             <h5>{errCreate}</h5>
-            <h1>Edit Kecamatan {wKecmatan}</h1>
+            <h1>Edit Berita {wKecmatan}</h1>
             <form id='myform'>
             <Stack spacing={2} m={2}>
               
-              <div className="form-group">
-              <TextField id="kecamatan" label="Kecamatan" value={kecamatans !== undefined && kecamatans !== null ? kecamatans : ''} variant="outlined" focused onChange={(e) => setKecamatan(e.target.value)} fullWidth required/>
-              </div>
+              <FormGroup>
+              <TextField id="berita" label="Judul" value={beritas !== undefined && beritas !== null ? beritas : ''} variant="outlined" focused onChange={(e) => setBerita(e.target.value)} fullWidth required/>
+              </FormGroup>
+              <FormGroup>
+              <TextField id="penulis" label="Penulis" value={penuliss !== undefined && penuliss !== null ? penuliss : ''} variant="outlined" focused onChange={(e) => setPenulis(e.target.value)} fullWidth required/>
+              </FormGroup>
+              <FormGroup>
+              <FormGroup>
+                <InputLabel>Status</InputLabel>
+                <Select fullWidth label="Status" value={statuss} onChange={(e) => {setStatus(e.target.value)}}>
+                  <MenuItem value={1}>Published</MenuItem>
+                  <MenuItem value={0}>Draft</MenuItem>
+                </Select>
+                </FormGroup>
+              </FormGroup>
+              <FormGroup>
+                <Typography variant='body2'>Tanggal Berita: {tanggalBerita}</Typography>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker 
+                // defaultValue={dayjs(new Date(tanggalBerita?.substring(0,10)))}
+                 fullWidth onChange={(e) => {setTanggalBerita((moment(new Date(e)).format('YYYY-MM-DD')))} }/>
+              </LocalizationProvider>
+              </FormGroup>
 
-              <div className='form-group'>
-                <FormLabel style={{color:"black"}}>Content</FormLabel>
+              <FormGroup>
+              <FormLabel style={{color:"black"}}>Content</FormLabel>
               <ReactQuill
                 theme="snow"
                 modules={modules}
@@ -307,11 +254,11 @@ export default function EditKecamatanPage() {
                 required
                 onChange={handleProcedureContentChange}
               />
-              </div>
+             </FormGroup>
               <Button onClick={handleEdit} variant='contained'>Submit</Button>
               <Divider style={{marginBottom:"20px"}}/>
 
-              <div className='form-group'>
+              <FormGroup>
               <FormLabel style={{color:"black", fontWeight:"bold"}}>Image 1 </FormLabel>
               {
                 tempImage1 !== undefined ?
@@ -320,13 +267,13 @@ export default function EditKecamatanPage() {
                 :
                 <img src={`${BACKEND_API}${image1}`} alt="asd" height={200} />
               }
-              </div>
+              </FormGroup>
 
 
               <div className="form-group">
-              {
+                {
                   uploadProgress !== null ? 
-                  <h5>Upload Percentage {uploadProgress}%</h5>
+                  <h5 >Upload Percentage {uploadProgress}%</h5>
                   :
                   <></>
                 }
@@ -335,34 +282,7 @@ export default function EditKecamatanPage() {
                   <Input accept="image/*" type="file" name="image1" onChange={onFileChange} required/>
                   <Button onClick={handleImage1} variant='contained' fullWidth>Upload</Button>
               </div>
-              <Divider style={{marginBottom:"20px"}}/>
-      
-      
-              <div className='form-group'>
-              <FormLabel style={{color:"black"}}>Image 2 </FormLabel>
-                {/* <img src={`${BACKEND_API}${image2}`} alt="asd" height={200} /> */}
-                {
-                tempImage2 !== undefined ?
-                <img src={URL.createObjectURL(tempImage2)} alt="asd" height={200} />
-
-                :
-                <img src={`${BACKEND_API}${image2}`} alt="asd" height={200} />
-              }
-              </div>
-              <div className="form-group">
-              {
-                  uploadProgress2 !== null ? 
-                  <h5>Upload Percentage {uploadProgress2}%</h5>
-                  :
-                  <></>
-                }
-              <h5>{errCreateImage2}</h5>
-              <FormLabel style={{color:"black", fontWeight:"bold"}}>Image 2 </FormLabel>
-                  <Input type="file" name="image2" onChange={onFileChange2} required/>
-                  <Button onClick={handleImage2} variant='contained' fullWidth>Upload</Button>
-              </div>
-             
-              
+              <Divider style={{marginBottom:"20px"}}/> 
               </Stack>
              
             </form>

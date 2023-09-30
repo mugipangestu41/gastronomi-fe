@@ -50,10 +50,10 @@ export default function AppWidgetSummary(
       style={{maxHeight: "220px"}}
       {...other}
     >
-      <Grid container spacing={2}>\
+      <Grid container spacing={2}>
       <Grid item xs={6} sm={6} md={6}>
-        <Paper style={{backgroundImage: `url(${BACKEND_API}${image})`, 
-          backgroundSize: "cover", backgroundRepeat: "no-repeat", height: "100vh",maxHeight:"220px"}}/>
+        <Paper style={image !== undefined ? {backgroundImage: `url(${BACKEND_API}${image})`, 
+          backgroundSize: "cover", backgroundRepeat: "no-repeat", height: "100vh",maxHeight:"220px"} : {}}/>
       </Grid>
 
       <Grid item xs={5} sm={5} md={5} style={{marginTop: "10px", marginBottom: "10px"}}>

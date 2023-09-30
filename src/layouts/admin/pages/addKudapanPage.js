@@ -189,7 +189,7 @@ export default function AddKudapanPage() {
   return (
     <>
       <Helmet>
-        <title> Gastronita | Detail Kudapan </title>
+        <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Detail Kudapan </title>
       </Helmet>
       {/* {
         console.log(test2)

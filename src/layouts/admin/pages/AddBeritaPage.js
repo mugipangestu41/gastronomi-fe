@@ -4,15 +4,16 @@ import { Helmet } from 'react-helmet-async';
 // import { useTheme } from '@mui/material/styles';
 import axios from 'axios';
 // import { useNavigate } from 'react-router-dom';
-import { Grid, Container, Button, TextField, Stack, Input, FormLabel } from '@mui/material';
+import { Grid, Container, Button, TextField, Stack, Input, FormLabel, Typography, InputLabel, Select, MenuItem, FormGroup } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+// import dayjs from 'dayjs';
 
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
-
-
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 // components
 // import Iconify from '../components/iconify';
 // // sections
@@ -30,7 +31,7 @@ import 'react-quill/dist/quill.snow.css';
 
 // ----------------------------------------------------------------------
 
-export default function AddKecamatanPage() {
+export default function AddBeritaPage() {
   // const theme = useTheme();
   // const navigate = useNavigate();
   const navigate = useNavigate();
@@ -39,9 +40,11 @@ export default function AddKecamatanPage() {
   
   const [uploadProgress, setUploadProgress] = useState(null)
   const [errCreate, setErrCreate] = useState('')
-  const [kecamatans, setKecamatan] = useState(null)
+  const [beritas, setBerita] = useState(null)
   const [contents, setContent] = useState('')
-
+  const [penuliss, setPenulis] = useState('')
+  const [tanggalBerita, setTanggalBerita] = useState(null)
+  const [statuss, setStatus] = useState(1)
   // const testVal = "http://localhost:3001/photos/0.png_1693883284382.png"
   const onFileChange = async (event)=> {    
     formData.append("files", event.target.files[0]);
@@ -51,7 +54,7 @@ export default function AddKecamatanPage() {
     // e.preventDefault();
     try {
         const headers = {'Content-Type': 'multipart/form-data', 'Authorization': `Bearer ${localStorage.getItem('token')}`}
-        await axios.post(`${API_URL}kecamatan/createOneKecamatan`,
+        await axios.post(`${API_URL}berita/createOneBerita`,
         formData, {headers, 
           onUploadProgress:(progressEvent) => {
             const percentCompleted = Math.round((progressEvent.loaded / progressEvent.total)*100);
@@ -63,25 +66,31 @@ export default function AddKecamatanPage() {
           }
         })
         .then(() => {
-          setErrCreate(`Success data kecamatan ${kecamatans} ditambahkan`)
-          // window.alert(`Success data kecamatan ${kecamatans} ditambahkan`)
-          setKecamatan(null)
+          setErrCreate(`Success data berita ${beritas} ditambahkan`)
+          // window.alert(`Success data berita ${beritas} ditambahkan`)
+          setBerita(null)
           setContent('')
           formData.delete("files")
-          formData.delete("kecamatan")
+          formData.delete("judul")
           formData.delete("content")
+          formData.delete("penulis")
+          formData.delete("tanggal_berita")
+          formData.delete("status")
           document.getElementById("myform").reset();
-            navigate('/admin/addKecamatanPage')
+            navigate('/admin/addBeritaPage')
 
         })
         .catch((e) => {
           console.log(e?.response?.data?.messages)
           setErrCreate(e?.response?.data?.messages)
-          setKecamatan(null)
+          setBerita(null)
           setContent('')
           formData.delete("files")
-          formData.delete("kecamatan")
+          formData.delete("judul")
           formData.delete("content")
+          formData.delete("penulis")
+          formData.delete("tanggal_berita")
+          formData.delete("status")
           document.getElementById("myform").reset();
           // window.alert(`Error`)
           // window.location.reload()
@@ -92,7 +101,7 @@ export default function AddKecamatanPage() {
     } catch (err) {
       window.alert(`Error`)
       console.log(err);
-      navigate('/admin/addKecamatanPage')
+      navigate('/admin/addBeritaPage')
     }
   };
 
@@ -100,27 +109,36 @@ export default function AddKecamatanPage() {
     
     try {
       console.log(formData.get("files"))
-      if(kecamatans == null){
+      if(beritas === null || penuliss === ''|| contents === '' || tanggalBerita === null){
         formData.delete("files")
-        formData.delete("kecamatan")
-        formData.delete("content")
-        setErrCreate("Kolom kecamatan wajib di isi")
-        setKecamatan(null)
+          formData.delete("judul")
+          formData.delete("content")
+          formData.delete("penulis")
+          formData.delete("tanggal_berita")
+          formData.delete("status")
+        setErrCreate("Semua kolom berita wajib di isi")
+        setBerita(null)
         setContent('')
         document.getElementById("myform").reset();
       } else if(formData.get("files") == null){
         formData.delete("files")
-        formData.delete("kecamatan")
+        formData.delete("judul")
         formData.delete("content")
+        formData.delete("penulis")
+        formData.delete("tanggal_berita")
+        formData.delete("status")
         setErrCreate("Kolom file wajib di isi")
-        setKecamatan(null)
+        setBerita(null)
         setContent('')
         document.getElementById("myform").reset();
       }
       else {
         setUploadProgress(null)
-        formData.append("kecamatan", kecamatans)
+        formData.append("judul", beritas)
         formData.append("content", contents)
+        formData.append("penulis", penuliss)
+        formData.append("tanggal_berita", tanggalBerita)
+        formData.append("status", statuss)
         handleUpload()
       }
         
@@ -176,25 +194,44 @@ export default function AddKecamatanPage() {
   return (
     <>
       <Helmet>
-        <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Detail Kecamatan </title>
+        <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Detail Berita </title>
       </Helmet>
-      {/* {
-        console.log(test2)
-      } */}
       <Container maxWidth="md"> 
         <Grid container spacing={3}>
         <Grid item xs={12} sm={12} md={12}>
-        <p><a href='/admin'>Kecamatan</a> &#129058; <a style={{color:"black"}}>Tambah Kecamatan</a></p>
+        <p><a href='/admin/berita'>Berita</a> &#129058; <a style={{color:"black"}}>Tambah Berita</a></p>
         </Grid>
           <Grid item xs={12} sm={12} md={12}>
             <h5>{errCreate}</h5>
-            <h3>Tambah Kecamatan</h3>
+            <h3>Tambah Berita</h3>
             <form id='myform'>
             <Stack spacing={2} m={2}>
               
-              <div className="form-group">
-              <TextField id="kecamatan" label="Kecamatan" variant="outlined" onChange={(e) => setKecamatan(e.target.value)} fullWidth required/>
-              </div>
+              <FormGroup>
+              <TextField id="judul" label="Judul" variant="outlined" onChange={(e) => setBerita(e.target.value)} fullWidth required/>
+              </FormGroup>
+
+              <FormGroup>
+              <TextField id="penulis" label="Penulis" variant="outlined" onChange={(e) => setPenulis(e.target.value)} fullWidth required/>
+              </FormGroup>
+
+              <FormGroup>
+                <Typography variant='body2'>Tanggal Berita</Typography>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker 
+                // defaultValue={dayjs(new Date())}
+                 fullWidth onChange={(e) => {setTanggalBerita(( new Date(e).toISOString().split('T')[0]))} }/>
+              </LocalizationProvider>
+              </FormGroup>
+
+              <FormGroup>
+                <InputLabel>Status</InputLabel>
+                <Select fullWidth label="Status" value={statuss} onChange={(e) => {setStatus(e.target.value)}}>
+                  <MenuItem value={1}>Published</MenuItem>
+                  <MenuItem value={0}>Draft</MenuItem>
+                </Select>
+                </FormGroup>
+
 
               {/* <div className="form-group">
               <TextField id="content" label="Content" variant="outlined" onChange={(e) => setContent(e.target.value)} fullWidth required/>
@@ -216,10 +253,7 @@ export default function AddKecamatanPage() {
                   <FormLabel style={{color:"black"}}>Image 1 </FormLabel>
                   <Input type="file" name="image1" onChange={onFileChange} required/>
               </div>
-              <div className="form-group">
-              <FormLabel style={{color:"black"}}>Image 2 </FormLabel>
-                  <Input type="file" name="image2" onChange={onFileChange} required/>
-              </div>
+             
               <div className='form-group'>
                 {
                   uploadProgress !== null ? 
@@ -233,17 +267,7 @@ export default function AddKecamatanPage() {
              
             </form>
             
-        </Grid>
-
-      
-
-         
-
-        
-         
-
-
-        
+        </Grid> 
         </Grid>
       </Container>
     </>

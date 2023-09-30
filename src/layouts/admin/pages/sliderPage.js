@@ -191,7 +191,7 @@ export default function SliderPage() {
   return (
     <>
       <Helmet>
-        <title> Slider | Minimal UI </title>
+        <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Slider </title>
       </Helmet>
 
       <Container maxWidth="md">

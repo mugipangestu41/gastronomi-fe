@@ -203,7 +203,7 @@ export default function KecamatanPage() {
   return (
     <>
       <Helmet>
-        <title> Kecamatan | Minimal UI </title>
+        <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Kecamatan </title>
       </Helmet>
 
       <Container maxWidth="md">

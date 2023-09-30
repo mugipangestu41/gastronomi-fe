@@ -9,17 +9,27 @@ const navConfig = [
   {
     title: 'kecamatan',
     path: '/admin/kecamatan',
-    icon: icon('ic_analytics'),
+    icon: icon('ic_disabled'),
   },
   {
     title: 'Beranda',
     path: '/admin/beranda',
-    icon: icon('ic_user'),
+    icon: icon('ic_blog'),
   },
   {
     title: 'Slider Beranda',
     path: '/admin/slider',
-    icon: icon('ic_user'),
+    icon: icon('ic_lock'),
+  },
+  {
+    title: 'Berita',
+    path: '/admin/berita',
+    icon: icon('ic_blog'),
+  },
+  {
+    title: 'Komentar',
+    path: '/admin/komentar',
+    icon: icon('ic_lock'),
   },
 
 ];

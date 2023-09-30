@@ -182,7 +182,7 @@ export default function AddMenuMakananPage() {
   return (
     <>
       <Helmet>
-        <title> Gastronita | Detail MenuMakanan </title>
+        <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Detail MenuMakanan </title>
       </Helmet>
       {/* {
         console.log(test2)

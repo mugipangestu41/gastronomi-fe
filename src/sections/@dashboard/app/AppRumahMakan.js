@@ -45,7 +45,7 @@ export default function AppRumahMakan(
       style={{maxHeight: "220px"}}
       {...other}
     >
-      <Grid container spacing={2}>\
+      <Grid container spacing={2}>
       <Grid item xs={6} sm={6} md={6}>
         <Paper style={{backgroundImage: `url(${BACKEND_API}${image})`, 
           backgroundSize: "cover", backgroundRepeat: "no-repeat", height: "100vh",maxHeight:"220px"}}/>
@@ -60,7 +60,7 @@ export default function AppRumahMakan(
           Kecamatan {kecamatan}
         </Typography>
         {/* /uuid-rumah-makan */}
-       <Button href={`/rumah-makan/${id}/${rumahMakan}` }style={{marginTop: "35px", marginLeft:"-10px"}}>Selengkapnya</Button>
+       <Button href={`/aktivitas/${id}/${rumahMakan}` }style={{marginTop: "35px", marginLeft:"-10px"}}>Selengkapnya</Button>
       </Grid>
       </Grid>
       

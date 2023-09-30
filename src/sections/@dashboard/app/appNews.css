@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+/* width */
+
+.padding {
+  margin-top: 5px;
+}
+@media (max-width: 768px) {
+  .padding {
+    padding: 5px;
+  }
+}
+
+@media (max-width: 600px) {
+  .padding {
+    padding: 8px;
+    margin-top: -10px;
+    margin-bottom: 10px;
+  }
+}

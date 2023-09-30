@@ -5,6 +5,7 @@ import { styled } from '@mui/material/styles';
 //
 // import Header from './header';
 import Nav from './nav';
+import Footer from './footer';
 
 
 // ----------------------------------------------------------------------
@@ -45,6 +46,7 @@ export default function DashboardLayout() {
       <Main>
         <Outlet />
       </Main>
+      <Footer/>
     </div>
   );
 }

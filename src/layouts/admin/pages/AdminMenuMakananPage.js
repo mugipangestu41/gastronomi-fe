@@ -207,7 +207,7 @@ export default function AdminMenuMakananPage() {
   return (
     <>
       <Helmet>
-        <title> MenuMakanan | Minimal UI </title>
+        <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Menu Makanan </title>
       </Helmet>
 
       <Container maxWidth="md">

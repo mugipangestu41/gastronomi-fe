@@ -43,7 +43,7 @@ export default function DestinasiPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Kecamatan | Minimal UI </title>
+        <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Destinasi</title>
       </Helmet>
 
       <Container>
