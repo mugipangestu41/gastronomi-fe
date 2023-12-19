@@ -182,7 +182,7 @@ export default function DashboardAppPage() {
             {/* </Card> */}
           </Grid>
 
-          <Grid item xs={12} md={6} lg={8}>
+          <Grid item xs={12} md={8} lg={8}>
             <Card>
               <div style={{marginLeft:"10px", marginTop:"10px", marginBottom:"10px", marginRight:"10px"}}>
             <Typography variant='h5'>{beranda[0]?.judul}</Typography>
