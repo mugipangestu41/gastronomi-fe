@@ -331,6 +331,7 @@ export default function EditKudapanPage() {
 
               <div className="form-group">
               <TextField id="alamat_makanan" label="Alamat Kudapan" value={alamat_makanans !== undefined && alamat_makanans !== null ? alamat_makanans : ''} variant="outlined" focused onChange={(e) => setAlamatMakanan(e.target.value)} fullWidth required/>
+              <div style={{color:"grey", fontSize:12}}>Format: Alamat | Link Google Maps | No Telepon</div>
               </div>
 
               <div className="form-group">

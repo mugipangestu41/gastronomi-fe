@@ -38,7 +38,7 @@ import { UserListHead2, UserListToolbar } from '../../../sections/@dashboard/use
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'rumah_makan', label: 'Nama Aktivitas', alignRight: false },
+  { id: 'rumah_makan', label: 'Nama Rumah Makan', alignRight: false },
   { id: '' },
 ];
 
@@ -206,7 +206,7 @@ export default function AdminRumahMakanPage() {
   return (
     <>
       <Helmet>
-        <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Aktivitas Gastronomi </title>
+        <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Rumah Makan </title>
       </Helmet>
 
       <Container maxWidth="md">
@@ -215,7 +215,7 @@ export default function AdminRumahMakanPage() {
           <Grid item xs={12} sm={12} md={12}>
           <p><a href='/admin'>Kecamatan</a> &#129058;
           &nbsp;<a href={`${localStorage.getItem('editKecamatan')}`} >Edit Kecamatan</a> &#129058;
-          &nbsp;<a style={{color:"black"}}>Aktivitas Gastronomi</a> 
+          &nbsp;<a style={{color:"black"}}>Rumah Makan</a> 
           </p>
           </Grid>
           :
@@ -223,10 +223,10 @@ export default function AdminRumahMakanPage() {
         }
        
           <Typography variant="h4" gutterBottom>
-            Aktivitas Gastronomi di Kecamatan {`${wKecamatan}`}
+            Rumah Makan di Kecamatan {`${wKecamatan}`}
           </Typography>
           <Button style={{marginBottom:"15px"}} href={`/admin/addRumahMakanPage/${wKecamatan}/${wId}`} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
-          Aktivitas Gastronomi
+          Rumah Makan
           </Button>
 
         <Card>
@@ -257,7 +257,7 @@ export default function AdminRumahMakanPage() {
 
                         <TableCell component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="center" spacing={2}>
-                            <a style={{marginLeft: "15px"}} href={`/admin/editAktivitas/${id_rumah_makan}`}>{nama_rumah_makan}</a>
+                            <a style={{marginLeft: "15px"}} href={`/admin/editRumahMakan/${id_rumah_makan}`}>{nama_rumah_makan}</a>
                           </Stack>
                         </TableCell>
 

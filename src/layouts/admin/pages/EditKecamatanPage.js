@@ -285,7 +285,7 @@ export default function EditKecamatanPage() {
         </Grid>
 
         <Grid item xs={12} sm={12} md={6}>
-          <Button href={`/admin/aktivitas/${wKecmatan}/${wId}`} variant='outlined'>Kelola Aktivitas Gastronomi di Kecamatan {wKecmatan}</Button>
+          <Button href={`/admin/rumahMakan/${wKecmatan}/${wId}`} variant='outlined'>Kelola Rumah Makan di Kecamatan {wKecmatan}</Button>
         </Grid>
           <Grid item xs={12} sm={12} md={12}>
             <h5>{errCreate}</h5>

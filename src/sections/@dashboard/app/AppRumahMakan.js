@@ -60,7 +60,7 @@ export default function AppRumahMakan(
           Kecamatan {kecamatan}
         </Typography>
         {/* /uuid-rumah-makan */}
-       <Button href={`/aktivitas/${id}/${rumahMakan}` }style={{marginTop: "35px", marginLeft:"-10px"}}>Selengkapnya</Button>
+       <Button href={`/rumahMakan/${id}/${rumahMakan}` }style={{marginTop: "35px", marginLeft:"-10px"}}>Selengkapnya</Button>
       </Grid>
       </Grid>
       

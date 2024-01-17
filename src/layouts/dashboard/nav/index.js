@@ -58,7 +58,7 @@ export default function Nav({ openNav, onCloseNav }) {
   return (
     <div  className='sticky'>
       
-    <nav className="navbar" >
+    <nav className="navbar" style={{backgroundColor: 'rgba(255, 255, 255, 0.5)', backdropFilter: 'blur(4px)'}}>
     <div className="container">
       <div className="logo">
         {

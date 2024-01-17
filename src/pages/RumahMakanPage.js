@@ -152,13 +152,13 @@ export default function RumahMakanPage() {
   return (
     <>
       <Helmet>
-        <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Aktivitas Gastronomi </title>
+        <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Rumah Makan </title>
       </Helmet>
 
       <Container maxWidth="md">
      
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Aktivitas Gastronomi di Kecamatan {`${rumahMakanId}`}
+          Rumah Makan di Kecamatan {`${rumahMakanId}`}
         </Typography>
 
  

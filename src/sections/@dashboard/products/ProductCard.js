@@ -26,7 +26,7 @@ ShopProductCard.propTypes = {
 
 export default function ShopProductCard({ kecamatans }) {
   const BACKEND_API = process.env.REACT_APP_BE
-  const { image1, kecamatan } = kecamatans;
+  const { image2, kecamatan } = kecamatans;
 
   return (
     <Card>
@@ -47,7 +47,7 @@ export default function ShopProductCard({ kecamatans }) {
           </Label>
         )} */}
        
-        <StyledProductImg alt={kecamatan} src={`${BACKEND_API}${image1}`} />
+        <StyledProductImg alt={kecamatan} src={`${BACKEND_API}${image2}`} />
       </Box>
 
       <Stack spacing={2} sx={{ p: 3 }}>

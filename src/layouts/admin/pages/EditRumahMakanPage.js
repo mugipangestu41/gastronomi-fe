@@ -133,7 +133,7 @@ export default function EditRumahMakanPage() {
         }, {headers})
         .then(() => {
           setErrCreate(`Success data rumah makan ${nama_rumah_makans} berhasil di edit`)
-          navigate(`/admin/editAktivitas/${wId}`)
+          navigate(`/admin/editRumahMakan/${wId}`)
 
         })
         .catch((e) => {
@@ -200,7 +200,7 @@ export default function EditRumahMakanPage() {
           setErrCreateImage1(`Success data image 1 berhasil diubah`)
           // window.alert(`Success data rumahMakan ditambahkan`)
           formData.delete("files")
-          navigate(`/admin/editAktivitas/${wId}`)
+          navigate(`/admin/editRumahMakan/${wId}`)
 
         })
         .catch((e) => {
@@ -212,7 +212,7 @@ export default function EditRumahMakanPage() {
     } catch (err) {
       window.alert(`Error`)
       console.log(err);
-      navigate(`/admin/editAktivitas/${wId}`)
+      navigate(`/admin/editRumahMakan/${wId}`)
     }
   };
 
@@ -234,7 +234,7 @@ export default function EditRumahMakanPage() {
           setErrCreateImage2(`Success data image 2 berhasil diubah`)
           // window.alert(`Success data rumahMakan ditambahkan`)
           formData2.delete("files")
-          navigate(`/admin/editAktivitas/${wId}`)
+          navigate(`/admin/editRumahMakan/${wId}`)
 
         })
         .catch((e) => {
@@ -246,7 +246,7 @@ export default function EditRumahMakanPage() {
     } catch (err) {
       window.alert(`Error`)
       console.log(err);
-      navigate(`/admin/editAktivitas/${wId}`)
+      navigate(`/admin/editRumahMakan/${wId}`)
     }
   };
 
@@ -310,29 +310,31 @@ export default function EditRumahMakanPage() {
         <Grid item xs={12} sm={12} md={12}>
           <p><a href='/admin'>Kecamatan</a> &#129058;
           &nbsp;<a href={`${localStorage.getItem('editKecamatan')}`} >Edit Kecamatan</a> &#129058;
-          &nbsp;<a href={`${localStorage.getItem('rumahMakan')}`} >Aktivitas Gastronomi</a> &#129058;
-          &nbsp;<a style={{color:"black"}}>Edit Aktivitas Gastronomi</a> 
+          &nbsp;<a href={`${localStorage.getItem('rumahMakan')}`} >Rumah Makan</a> &#129058;
+          &nbsp;<a style={{color:"black"}}>Edit Rumah Makan</a> 
           </p>
         </Grid>
         :
         <></>
         }
 
-        {/* <Grid item xs={12} sm={12} md={6}>
+        <Grid item xs={12} sm={12} md={6}>
           <Button href={`/admin/menuMakanan/${nama_rumah_makans}/${wId}`} variant='outlined'>Kelola Menu Makanan di {nama_rumah_makans}</Button>
-        </Grid> */}
+        </Grid>
           <Grid item xs={12} sm={12} md={12}>
             <h5>{errCreate}</h5>
-            <h1>Edit Aktivitas Gastronomi</h1>
+            <h1>Edit Rumah Makan</h1>
             <form id='myform'>
             <Stack spacing={2} m={2}>
               
               <div className="form-group">
-              <TextField id="nama_rumah_makan" label="Nama Aktivitas" value={nama_rumah_makans !== undefined && nama_rumah_makans !== null ? nama_rumah_makans : ''} variant="outlined" focused onChange={(e) => setNamaRumahMakan(e.target.value)} fullWidth required/>
+              <TextField id="nama_rumah_makan" label="Nama" value={nama_rumah_makans !== undefined && nama_rumah_makans !== null ? nama_rumah_makans : ''} variant="outlined" focused onChange={(e) => setNamaRumahMakan(e.target.value)} fullWidth required/>
               </div>
 
               <div className="form-group">
-              <TextField id="alamat" label="Alamat Aktivitas" value={alamats !== undefined && alamats !== null ? alamats : ''} variant="outlined" focused onChange={(e) => setAlamat(e.target.value)} fullWidth required/>
+              <TextField id="alamat" label="Alamat" value={alamats !== undefined && alamats !== null ? alamats : ''} variant="outlined" focused onChange={(e) => setAlamat(e.target.value)} fullWidth required/>
+              <div style={{color:"grey", fontSize:12}}>Format: Alamat | Link Google Maps | No Telepon</div>
+              
               </div>
 
               <div className="form-group">

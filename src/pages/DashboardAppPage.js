@@ -210,7 +210,7 @@ export default function DashboardAppPage() {
           </Card>
 
           <Card style={{marginBottom:"15px", padding:"10px"}}>
-              <Typography style={{marginBottom:"15px"}} variant='h5'>Kudapan Terbaru</Typography>
+              <Typography style={{marginBottom:"15px"}} variant='h5'>Kudapan dan Menu Terbaru</Typography>
               {
                 kudapanTerbaru?.map((data) => (
                   <AppKudapanTerbaru key={data?.id_makanan} id={data?.id_makanan} judul={data?.nama_makanan} image1={data?.image1}/>
@@ -218,7 +218,7 @@ export default function DashboardAppPage() {
               }
               
               <div style={{marginTop:"20px"}}>
-              <a style={{color:"black", fontWeight:'bold'}} href='/pencarian'>Lihat semua kudapan</a>
+              <a style={{color:"black", fontWeight:'bold'}} href='/pencarian'>Lihat semua</a>
               </div>
           </Card>
             

@@ -3,6 +3,8 @@ import { Rating } from 'react-simple-star-rating'
 // import { faker } from '@faker-js/faker';
 // @mui
 // import { useTheme } from '@mui/material/styles';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
 import axios from 'axios'
 import { Grid, Button,Container, Typography, Card, Divider, Paper, TextField, TextareaAutosize, Box, 
   // Button 
@@ -165,12 +167,42 @@ export default function DetailMakananPage() {
               <center style={{marginTop:"10px"}}>
                 
                <Typography variant='subtitle2'>
-               {/* Ketan Bakar Lembang, Jl. Raya Lembang No.76, Jayagiri, Kec. Lembang, Kabupaten Bandung Barat, Jawa Barat 40391 */}
                {
                 makanan?.nama_rumah_makan === null ?
-                makanan?.alamat_makanan
+                
+                  makanan?.alamat_makanan?.split(' | ').length === 3 ? 
+
+                  <Grid container spacing={1}>
+                  <Grid item xs={1} md={1} lg={1}>
+                    <div style={{textAlign:"right"}}>
+                      <PlaceOutlinedIcon/>
+                    </div>
+                  
+                  </Grid>
+
+                  <Grid item xs={11} md={11} lg={11}>
+                    <a style={{textAlign:"left", display:"flex"}} target='_blank' rel="noreferrer" href={makanan?.alamat_makanan?.split((' | '))[1]} >{makanan?.alamat_makanan?.split((' | '))[0]}</a>
+                  </Grid>
+
+                  <Grid item xs={1} md={1} lg={1}>
+                    <div style={{textAlign:"right"}}>
+                      <WhatsAppIcon/>
+                    </div>
+                  </Grid>
+
+                  <Grid item xs={11} md={11} lg={11}>
+                    <p style={{textAlign:"left", display:"flex"}}> { makanan?.alamat_makanan?.split((' | '))[2]}</p>
+                  </Grid>
+                  </Grid>
+                  :
+                  makanan?.alamat_makanan 
+                
                 :
-                <> <a href={`/aktivitas/${makanan?.id_rumah_makan}/${makanan?.nama_rumah_makan}`}>{makanan?.nama_rumah_makan}</a> | {makanan?.alamat_rumah_makan}
+                makanan?.alamat_rumah_makan?.split(' | ').length === 3 ? 
+                <> <a href={`/rumahMakan/${makanan?.id_rumah_makan}/${makanan?.nama_rumah_makan}`}>{makanan?.nama_rumah_makan}</a> | {makanan?.alamat_rumah_makan?.split(' | ')[0]}
+                </>
+                :
+                <> <a href={`/rumahMakan/${makanan?.id_rumah_makan}/${makanan?.nama_rumah_makan}`}>{makanan?.nama_rumah_makan}</a> | {makanan?.alamat_rumah_makan}
                 </>
                }
                </Typography>
