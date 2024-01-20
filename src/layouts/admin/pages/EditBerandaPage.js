@@ -35,6 +35,8 @@ export default function EditBerandaPage() {
   const [juduls, setJudul] = useState('')
   const [subJuduls, setSubJudul] = useState('')
   const [contents, setContent] = useState('')
+  const [instagrams, setInstagram] = useState('')
+  const [emails, setEmail] = useState('')
   // const testVal = "http://localhost:3001/photos/0.png_1693883284382.png"
   const onFileChange = async (event) => { 
     setTempImage1()
@@ -66,6 +68,8 @@ export default function EditBerandaPage() {
         setContent(data?.data[0]?.content)
         setImage1(data?.data[0]?.image1)
         setImage2(data?.data[0]?.logo)
+        setInstagram(data?.data[0]?.instagram)
+        setEmail(data?.data[0]?.email)
       })
       .catch((err) =>
       {if(err.response.status === 401){
@@ -86,7 +90,9 @@ export default function EditBerandaPage() {
         {
           judul: juduls,
           sub_judul: subJuduls,
-          content: contents
+          content: contents,
+          instagram: instagrams,
+          email: emails
         }, {headers})
         .then(() => {
           localStorage.setItem("judul", juduls)
@@ -276,6 +282,14 @@ export default function EditBerandaPage() {
 
               <div className="form-group">
               <TextField id="sub_judul" label="Sub Judul" value={subJuduls !== undefined && subJuduls !== null ? subJuduls : ''} variant="outlined" focused onChange={(e) => setSubJudul(e.target.value)} fullWidth required/>
+              </div>
+
+              <div className="form-group">
+              <TextField id="instagram" label="Instagram" value={instagrams !== undefined && instagrams !== null ? instagrams : ''} variant="outlined" focused onChange={(e) => setInstagram(e.target.value)} fullWidth required/>
+              </div>
+
+              <div className="form-group">
+              <TextField id="email" label="Email" value={emails !== undefined && emails !== null ? emails : ''} variant="outlined" focused onChange={(e) => setEmail(e.target.value)} fullWidth required/>
               </div>
 
               <div className='form-group'>
