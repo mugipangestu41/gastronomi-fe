@@ -51,6 +51,10 @@ export default function DetailKecamatan() {
     <>
       <Helmet>
         <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Detail Kecamatan </title>
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href={window.location.href} />
+        <meta name="description" content={kecamatan?.content?.slice(0,500)} />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
       </Helmet>
 
       <Container maxWidth="lg">
@@ -63,7 +67,7 @@ export default function DetailKecamatan() {
           <Grid item xs={12} sm={6} md={8} lg={8}>
           <Paper style={kecamatan?.image1 !== undefined ? 
           {backgroundImage: `url(${BACKEND_API}${kecamatan?.image1})`, 
-          backgroundSize: "cover", backgroundRepeat: "no-repeat", height: "100vh",maxHeight:"300px"}
+          backgroundSize: "cover", height: "100vh",maxHeight:"300px"}
           : {}
           }/>
           </Grid>
@@ -71,7 +75,7 @@ export default function DetailKecamatan() {
           <Grid item xs={12} sm={6} md={12} lg={4}>
           <Paper style={kecamatan?.image2 !== undefined ? 
           {backgroundImage: `url(${BACKEND_API}${kecamatan?.image2})`, 
-          backgroundSize: "cover", backgroundRepeat: "no-repeat", height: "100vh",maxHeight:"300px"}
+          backgroundSize: "contain", backgroundPosition: "center",  height: "100vh",maxHeight:"300px"}
           : {}
           }/>
             

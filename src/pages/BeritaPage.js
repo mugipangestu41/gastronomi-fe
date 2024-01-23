@@ -130,6 +130,10 @@ export default function BeritaPage() {
     <>
       <Helmet>
         <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Berita </title>
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href={window.location.href} />
+        <meta name="description" content="Gastronomi Kuliner Bandung Barat" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
       </Helmet>
 
       <Container maxWidth="md">

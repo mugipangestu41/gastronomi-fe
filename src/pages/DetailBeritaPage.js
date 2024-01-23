@@ -61,6 +61,10 @@ export default function DetailBeritaPage() {
     <>
       <Helmet>
         <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Detail Berita</title>
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href={window.location.href} />
+        <meta name="description" content={berita?.content?.slice(0,500)} />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
       </Helmet>
 
       <Container maxWidth="lg">
@@ -93,10 +97,10 @@ export default function DetailBeritaPage() {
           )}</Typography>
             <Divider variant="fullWidth" style={{ margin: "10px 0"}}/>
              
-            <Typography variant='caption'>
+            {/* <Typography variant='caption'> */}
               {/* eslint-disable-next-line  */}
               <div  dangerouslySetInnerHTML={{__html: berita?.content}} />
-              </Typography>
+              {/* </Typography> */}
             </div>
             {/* </Card> */}
           </Grid>

@@ -302,6 +302,7 @@ export default function EditKudapanPage() {
     <>
       <Helmet>
         <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Detail Kudapan </title>
+        <meta name="robots" content="noindex,nofollow" />
       </Helmet>
       <Container maxWidth="md"> 
         <Grid container spacing={3}>

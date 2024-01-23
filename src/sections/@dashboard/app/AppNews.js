@@ -45,9 +45,9 @@ export default function AppNews(
         <div className='padding'>
         {
           content !== undefined ?
-        <Typography variant='h6' style={{textAlign:"left"}}>{judul}</Typography>
+        <Typography variant='h6' style={{textAlign:"left"}}>{judul?.slice(0,50)}...</Typography>
           :
-        <Typography variant='h7' style={{textAlign:"left"}}>{judul}</Typography>
+        <Typography variant='h7' style={{textAlign:"left"}}>{judul?.slice(0,50)}...</Typography>
 
         }
           

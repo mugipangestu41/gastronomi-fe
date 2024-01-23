@@ -102,6 +102,7 @@ export default function AddSliderPage() {
     <>
       <Helmet>
         <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Detail Slider </title>
+        <meta name="robots" content="noindex,nofollow" />
       </Helmet>
       {/* {
         console.log(test2)

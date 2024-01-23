@@ -190,6 +190,7 @@ export default function AddKudapanPage() {
     <>
       <Helmet>
         <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Detail Kudapan </title>
+        <meta name="robots" content="noindex,nofollow" />
       </Helmet>
       {/* {
         console.log(test2)

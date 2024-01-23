@@ -189,6 +189,7 @@ export default function AddRumahMakanPage() {
     <>
       <Helmet>
         <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Detail RumahMakan </title>
+        <meta name="robots" content="noindex,nofollow" />
       </Helmet>
       {/* {
         console.log(test2)

@@ -183,6 +183,7 @@ export default function AddMenuMakananPage() {
     <>
       <Helmet>
         <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Detail MenuMakanan </title>
+        <meta name="robots" content="noindex,nofollow" />
       </Helmet>
       {/* {
         console.log(test2)

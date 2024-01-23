@@ -193,6 +193,7 @@ export default function BeritaAdmin() {
     <>
       <Helmet>
         <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Berita </title>
+        <meta name="robots" content="noindex,nofollow" />
       </Helmet>
 
       <Container maxWidth="md">

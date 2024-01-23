@@ -29,7 +29,7 @@ export default function Footer() {
         </Grid>
           <Grid item xs={12} md={12} lg={12}>
           <Typography variant="body2" color="text.secondary" align="center">
-            <a href="https://instagram.com/mugitrash" target="_blank" rel="noreferrer" color="text.secondary"><InstagramIcon/></a>
+            <a style={{color: 'black'}} href="https://instagram.com/mugitrash" target="_blank" rel="noreferrer"><InstagramIcon/></a>
             </Typography>
           </Grid>
           <Grid item xs={12} md={12} lg={12}>

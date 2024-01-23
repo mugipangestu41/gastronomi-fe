@@ -175,6 +175,10 @@ export default function DetailRumahMakanPage() {
     <>
       <Helmet>
         <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Detail Rumah Makan </title>
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href={window.location.href} />
+        <meta name="description" content={detailRumahMakan?.content?.slice(0,500)} />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
       </Helmet>
 
       <Container maxWidth="lg">
@@ -247,10 +251,10 @@ export default function DetailRumahMakanPage() {
               <div style={{marginLeft:"10px", marginTop:"10px", marginBottom:"10px", marginRight:"10px"}}>
             <Typography variant='h5'>{detailRumahMakan?.nama_rumah_makan}</Typography>
             <Divider variant="fullWidth" style={{ margin: "10px 0"}}/>
-            <Typography variant='caption'>
+            {/* <Typography variant='caption'> */}
             {/* eslint-disable-next-line  */}
             <div style={{textAlign:"justify"}} dangerouslySetInnerHTML={{__html: detailRumahMakan?.content}} />
-            </Typography>
+            {/* </Typography> */}
             </div>
             </Card>
             <Card style={{marginTop:"10px"}}>

@@ -207,6 +207,7 @@ export default function EditBeritaPage() {
     <>
       <Helmet>
         <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Detail Berita </title>
+        <meta name="robots" content="noindex,nofollow" />
       </Helmet>
       <Container maxWidth="md"> 
         <Grid container spacing={3}>

@@ -177,6 +177,7 @@ export default function AddKecamatanPage() {
     <>
       <Helmet>
         <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Detail Kecamatan </title>
+        <meta name="robots" content="noindex,nofollow" />
       </Helmet>
       {/* {
         console.log(test2)

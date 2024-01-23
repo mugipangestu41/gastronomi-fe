@@ -278,6 +278,7 @@ export default function EditMenuMakananPage() {
     <>
       <Helmet>
         <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Detail MenuMakanan </title>
+        <meta name="robots" content="noindex,nofollow" />
       </Helmet>
       <Container maxWidth="md"> 
         <Grid container spacing={3}>

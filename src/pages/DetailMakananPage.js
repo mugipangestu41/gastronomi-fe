@@ -136,11 +136,15 @@ export default function DetailMakananPage() {
     <>
       <Helmet>
         <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Detail Makanan</title>
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href={window.location.href} />
+        <meta name="description" content={makanan?.content?.slice(0,500)} />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
       </Helmet>
 
       <Container maxWidth="lg">
      
-        <Typography variant="h2" sx={{ mb: 5 }}>
+        <Typography variant="h1" sx={{ mb: 5 }}>
           {makanan?.nama_makanan}
         </Typography>
 
@@ -215,13 +219,13 @@ export default function DetailMakananPage() {
 
           <Grid item xs={12} md={12} lg={8}>
             <Card>
-              <div style={{marginLeft:"10px", marginTop:"10px", marginBottom:"10px", marginRight:"10px"}}>
+              <div style={{marginLeft:"10px", marginTop:"10px", marginBottom:"10px", marginRight:"10px", textAlign:"justify"}}>
             <Typography variant='h5'>{makanan?.nama_makanan}</Typography>
             <Divider variant="fullWidth" style={{ margin: "10px 0"}}/>
-             <Typography variant='caption'>
+             {/* <Typography variant='caption'> */}
               {/* eslint-disable-next-line  */}
             <div dangerouslySetInnerHTML={{__html: makanan?.content}} />
-            </Typography>
+            {/* </Typography> */}
             </div>
             </Card>
           </Grid>

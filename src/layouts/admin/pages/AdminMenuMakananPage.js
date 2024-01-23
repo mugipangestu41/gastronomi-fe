@@ -208,6 +208,7 @@ export default function AdminMenuMakananPage() {
     <>
       <Helmet>
         <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Menu Makanan </title>
+        <meta name="robots" content="noindex,nofollow" />
       </Helmet>
 
       <Container maxWidth="md">

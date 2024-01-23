@@ -274,6 +274,7 @@ export default function EditKecamatanPage() {
     <>
       <Helmet>
         <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Detail Kecamatan </title>
+        <meta name="robots" content="noindex,nofollow" />
       </Helmet>
       <Container maxWidth="md"> 
         <Grid container spacing={3}>

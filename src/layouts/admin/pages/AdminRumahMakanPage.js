@@ -207,6 +207,7 @@ export default function AdminRumahMakanPage() {
     <>
       <Helmet>
         <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Rumah Makan </title>
+        <meta name="robots" content="noindex,nofollow" />
       </Helmet>
 
       <Container maxWidth="md">

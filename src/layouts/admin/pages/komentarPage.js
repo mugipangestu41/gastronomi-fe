@@ -192,6 +192,7 @@ export default function KomentarPage() {
     <>
       <Helmet>
         <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Komentar </title>
+        <meta name="robots" content="noindex,nofollow" />
       </Helmet>
 
       <Container maxWidth="md">

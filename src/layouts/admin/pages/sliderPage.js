@@ -192,6 +192,7 @@ export default function SliderPage() {
     <>
       <Helmet>
         <title> {localStorage.getItem("judul") !== null ? localStorage.getItem("judul") : ''} | Slider </title>
+        <meta name="robots" content="noindex,nofollow" />
       </Helmet>
 
       <Container maxWidth="md">
